@@ -1,0 +1,581 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Enter the Game Zone — Neon VR</title>
+
+  <!-- Preconnect to Google Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Oxanium:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Momo+Trust+Display&display=swap" rel="stylesheet">
+
+  <!-- Preload hero (replace with local WebP exports for best perf) -->
+  <!-- Recommended: export hero-desktop.webp (1920x1080 ~300KB) and hero-mobile.webp (960x1200 ~180KB) and place alongside this file -->
+  <link rel="preload" as="image" href="https://images7.alphacoders.com/135/thumb-1920-1358788.png">
+
+  <meta name="theme-color" content="#0a012d">
+
+  <style>
+  :root{
+    --container: 1200px;
+    --bg: #070018; /* deep purple */
+    --surface: rgba(255,255,255,0.03);
+    --glass: rgba(255,255,255,0.04);
+    --ink: #eaeaf3;
+    --muted: rgba(234,234,243,0.72);
+    --accent-magenta: #ff00c8;
+    --accent-cyan: #00e5ff;
+    --accent-blue: #6aa0ff;
+    --grad-cta: linear-gradient(90deg,var(--accent-magenta),var(--accent-cyan));
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --shadow-neon: 0 8px 40px rgba(106,160,255,0.12), 0 0 50px rgba(255,0,200,0.06);
+    --neon-glow: 0 0 18px rgba(0,229,255,0.12), 0 0 30px rgba(255,0,200,0.07);
+    --cyan: #00e5ff;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:var(--bg);color:var(--ink);font-family:'Momo Trust Display',Inter,system-ui,-apple-system,Segoe UI,Roboto,"Noto Sans",sans-serif;-webkit-font-smoothing:antialiased}
+
+  /* layout */
+  .site{max-width:var(--container);margin:0 auto;padding-inline:24px}
+
+  header.site-header{position:sticky;top:0;z-index:60;padding:16px 0;backdrop-filter: blur(10px);background:linear-gradient(180deg, rgba(10,1,45,0.35), rgba(10,1,45,0.18));border-bottom:1px solid rgba(255,255,255,0.03)}
+  .header-inner{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:var(--container);margin:0 auto}
+
+  .brand{display:flex;align-items:center;gap:12px}
+  .logo{width:36px;height:36px;border-radius:8px;background:linear-gradient(90deg,#ff00c8,#00e5ff);box-shadow:0 6px 18px rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;font-weight:700;color:#08102a}
+  .brand-name{font-family:'Momo Trust Display',Oxanium, Inter, sans-serif;font-weight:700;letter-spacing:0.06em}
+
+  nav.main-nav{display:flex;gap:18px;align-items:center}
+  nav.main-nav a{color:var(--ink);text-decoration:none;padding:6px 0;position:relative;font-weight:500}
+  nav.main-nav a:focus{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px}
+  nav.main-nav a.active::after{content:'';position:absolute;left:0;right:0;height:3px;background:var(--grad-cta);bottom:-8px;border-radius:3px}
+
+  /* Language switch buttons */
+  .lang-btn{padding:6px 10px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:var(--ink);font-weight:700;font-size:12px;cursor:pointer;transition:all 0.2s}
+  .lang-btn:hover{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.2)}
+  .lang-btn.active{background:var(--grad-cta);color:#08102a;border-color:var(--accent-magenta)}
+
+  .cta-pill{padding:8px 14px;border-radius:999px;background:var(--grad-cta);color:#08102a;font-weight:800;box-shadow:var(--shadow-neon);border:none;cursor:pointer}
+  .cta-pill:focus{outline:3px solid rgba(0,229,255,0.12)}
+
+  /* Mobile nav */
+  .hamburg{display:none;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:8px;border-radius:8px}
+
+  /* HERO */
+  .hero{position:relative;min-height:720px;display:flex;align-items:center;}
+
+  /* Use CSS Grid so the content stays LEFT and the visual stays RIGHT in both LTR and RTL */
+  .hero-inner{
+    display:grid;
+    grid-template-columns: 1fr 420px; /* same width for the visual card */
+    gap: var(--space-lg,40px);
+    align-items:center;
+    grid-template-areas: "content visual";
+    width:100%;
+    padding:64px 0;
+  }
+
+  /* map logical areas to elements */
+  .hero-content{ grid-area: content; text-align: left; }
+  .hero-visual{  grid-area: visual; }
+
+  .hero-left{max-width:560px}
+
+  .chip{display:inline-block;padding:6px 10px;border-radius:999px;background:transparent;border:1px solid rgba(255,255,255,0.06);font-weight:700;font-size:13px;margin-bottom:14px}
+  .chip .text-grad{background:var(--grad-cta);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+  /* author and quick link lines shown left of hero visual */
+  .author-line{margin-top:6px;font-weight:700;color:var(--ink);font-size:16px}
+  .see-games{margin-top:6px;display:inline-block;color:var(--accent-cyan);background:transparent;border-bottom:1px dashed rgba(0,229,255,0.12);padding-bottom:2px;text-decoration:none;font-weight:700}
+
+  h1.hero-title{font-family:'Momo Trust Display',Oxanium, Inter, sans-serif;font-weight:700;font-size:56px;line-height:1.02;margin:0;letter-spacing:0.06em;color:var(--ink)}
+  p.lead{margin-top:12px;color:var(--muted);font-size:18px;line-height:1.5}
+
+  /* CTAs should align to the start (left) of the content column */
+  .hero-ctas{display:flex;gap:12px;margin-top:22px;align-items:center;justify-content:flex-start}
+  .btn-primary{padding:14px 22px;border-radius:14px;background:var(--grad-cta);color:#071026;font-weight:800;border:none;cursor:pointer;box-shadow:var(--neon-glow);transform:translateZ(0)}
+  .btn-ghost{padding:12px 18px;border-radius:14px;background:transparent;border:1px solid rgba(255,255,255,0.08);color:var(--ink);display:inline-flex;gap:8px;align-items:center}
+  .btn-primary:hover,.btn-ghost:hover{transform:translateY(-4px);filter:drop-shadow(0 10px 30px rgba(0,0,0,0.4))}
+
+  /* progress track */
+  .progress-track{height:8px;border-radius:999px;background:linear-gradient(90deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));margin-top:18px}
+  .progress-track .bar{height:100%;border-radius:999px;background:var(--grad-cta);width:48%}
+
+  /* hero visual layer (background image + parallax wrapper) */
+  .hero-bg{position:absolute;inset:0;background-image:linear-gradient(180deg, rgba(10,1,45,0.75), rgba(10,1,45,0.85)), url('https://images7.alphacoders.com/135/thumb-1920-1358788.png');background-size:cover;background-position:center top;filter:contrast(0.9) saturate(1.05);z-index:0}
+  .parallax-wrap{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+
+  /* simplified overlay: move more to the right and make it clean */
+  .hero-overlay-left{
+    position:absolute;
+    left:18%;
+    top:50%;
+    transform:translateY(-50%);
+    z-index:5;
+    color:#ffffff;
+    font-weight:800;
+    font-size:36px;
+    font-family:'Momo Trust Display', Inter, sans-serif;
+    -webkit-font-smoothing:antialiased;
+    text-shadow:0 6px 18px rgba(0,0,0,0.6), 0 0 18px rgba(255,255,255,0.06);
+    pointer-events:auto;
+  }
+  @media (max-width:1199px){ .hero-overlay-left{font-size:28px} }
+  @media (max-width:767px){ .hero-overlay-left{ left:10%; font-size:18px } }
+
+  /* simplified subline positioned under the overlay with white glow and no border */
+  .overlay-sub{
+    position:absolute;
+    left:18%;
+    top:calc(50% + 56px);
+    transform:translateY(0);
+    z-index:5;
+    color:#ffffff;
+    font-weight:700;
+    font-size:15px;
+    text-shadow:0 8px 28px rgba(255,255,255,0.10);
+  }
+  @media (max-width:767px){ .overlay-sub{ left:10%; top:calc(50% + 44px); font-size:13px } }
+
+  /* floating lights */
+  .light{position:absolute;border-radius:50%;filter:blur(40px);opacity:0.9}
+  .l1{width:380px;height:380px;left:-8%;top:4%;background:radial-gradient(circle,#ff00c8,transparent)}
+  .l2{width:260px;height:260px;right:-6%;top:20%;background:radial-gradient(circle,#00e5ff,transparent)}
+  @keyframes drift{0%{transform:translateY(0)}50%{transform:translateY(18px)}100%{transform:translateY(0)}}
+  .light{animation:drift 8s ease-in-out infinite}
+
+  /* features */
+  .section{padding:72px 0}
+  .features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .card{background:var(--surface);border-radius:var(--radius-lg);padding:20px;border:1px solid rgba(255,255,255,0.04);box-shadow:0 12px 40px rgba(0,0,0,0.6);transition:transform .28s ease, box-shadow .28s ease}
+  .card:hover{transform:translateY(-8px);box-shadow:var(--shadow-neon)}
+  .card-thumb{width:100%;height:160px;border-radius:16px;overflow:hidden;background:#111}
+  .card-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .card h3{margin:12px 0 6px;font-size:20px}
+  .card p{color:var(--muted);font-size:14px}
+  .chip-row{display:flex;gap:8px;margin-top:10px}
+  .chip-mini{padding:6px 8px;border-radius:999px;font-size:12px;background:transparent;border:1px solid rgba(255,255,255,0.04)}
+
+  /* filters */
+  .filters{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+  .pill{padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--ink);cursor:pointer}
+  .pill.active{background:var(--grad-cta);color:#071026}
+
+  /* gallery */
+  .gallery-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+  .thumb{border-radius:12px;overflow:hidden;cursor:pointer}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+
+  /* newsletter / cta card */
+  .newsletter{display:flex;gap:18px;align-items:center;background:var(--glass);padding:18px;border-radius:16px;border:1px solid rgba(255,255,255,0.04)}
+  .newsletter .email{flex:1}
+  .newsletter input{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:var(--ink)}
+  .newsletter button{padding:10px 14px;border-radius:10px;background:var(--grad-cta);border:none;color:#071026;font-weight:800}
+  .privacy{font-size:13px;color:var(--muted);margin-top:8px}
+
+  /* footer */
+  footer.site-footer{padding:20px 0;border-top:1px solid rgba(255,255,255,0.02)}
+  .footer-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .social-dots{display:flex;gap:10px}
+  .dot{width:14px;height:14px;border-radius:50%;background:linear-gradient(90deg,var(--accent-magenta),var(--accent-cyan));box-shadow:0 6px 18px rgba(0,0,0,0.5)}
+
+  /* lightbox dialog */
+  dialog.lightbox{border:none;border-radius:14px;padding:0;background:transparent}
+  dialog.lightbox::backdrop{background:rgba(2,2,10,0.7)}
+  .lightbox-img{max-width:90vw;max-height:80vh;border-radius:10px;display:block}
+
+  /* responsive */
+  @media (max-width:1199px){
+    .features-grid{grid-template-columns:repeat(2,1fr)}
+    .gallery-grid{grid-template-columns:repeat(4,1fr)}
+    h1.hero-title{font-size:48px}
+    .hero{min-height:700px}
+  }
+  @media (max-width:767px){
+    .header-inner{padding-inline:6px}
+    nav.main-nav{display:none}
+    .hamburg{display:block}
+    .hero{min-height:680px}
+    /* stack content then visual on small screens */
+    .hero-inner{grid-template-columns:1fr;grid-template-areas: "content" "visual";align-items:flex-start}
+    .hero-left{max-width:100%}
+    .hero-title{font-size:32px}
+    .features-grid{grid-template-columns:1fr}
+    .gallery-grid{grid-template-columns:repeat(2,1fr)}
+    .gallery-grid .thumb{height:120px}
+  }
+
+  /* reduced motion */
+  @media (prefers-reduced-motion: reduce){
+    .light{animation:none}
+    .card, .btn-primary, .btn-ghost{transition:none}
+  }
+
+  /* RTL support — keep hero layout fixed: content LEFT, visual RIGHT */
+  html[dir="rtl"] .hero-inner{
+    /* keep same grid areas so content remains left and visual stays right */
+    grid-template-areas: "content visual";
+    gap: 40px;
+  }
+  /* ensure hero content keeps left alignment even in RTL */
+  html[dir="rtl"] .hero-content{
+    text-align: left;
+  }
+  /* Move Arabic overlay text closer to the right edge (user request) */
+  html[dir="rtl"] .hero-overlay-left{
+    left: auto;
+    right: 12%; /* closer to right edge than before */
+    top: 45%;
+  }
+  html[dir="rtl"] .overlay-sub{
+    left: auto;
+    right: 12%;
+    top: calc(45% + 70px);
+  }
+  html[dir="rtl"] .hero-ctas{
+    justify-content: flex-start;
+  }
+  html[dir="rtl"] .header-inner{
+    flex-direction: row-reverse;
+  }
+  html[dir="rtl"] nav.main-nav{
+    flex-direction: row-reverse;
+  }
+  html[dir="rtl"] .footer-row{
+    flex-direction: row-reverse;
+  }
+  html[dir="rtl"] .footer-row > div:first-child{
+    flex-direction: row-reverse;
+  }
+  html[dir="rtl"] .features-grid{
+    direction: rtl;
+  }
+  html[dir="rtl"] .card{
+    text-align: right;
+    direction: rtl;
+  }
+  html[dir="rtl"] .chip-row{
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+  }
+  html[dir="rtl"] p, html[dir="rtl"] h1, html[dir="rtl"] h2, html[dir="rtl"] h3{
+    text-align: right;
+  }
+  html[dir="rtl"] .hero-lead, html[dir="rtl"] .lead{
+    text-align: right;
+  }
+  html[dir="rtl"] .author-line{
+    text-align: right;
+  }
+
+  /* Arabic overlay styles */
+  html[dir="rtl"] #overlay-name{
+    font-size: 42px;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    text-shadow: 0 8px 24px rgba(0,0,0,0.7), 0 0 20px rgba(0, 229, 255, 0.15);
+  }
+  html[dir="rtl"] #overlay-sub{
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-shadow: 0 6px 20px rgba(0,0,0,0.6), 0 0 16px rgba(255, 255, 255, 0.12);
+  }
+  @media (max-width:1199px){
+    html[dir="rtl"] #overlay-name{ font-size: 32px; }
+    html[dir="rtl"] #overlay-sub{ font-size: 14px; }
+  }
+  @media (max-width:767px){
+    html[dir="rtl"] #overlay-name{ font-size: 22px; }
+    html[dir="rtl"] #overlay-sub{ font-size: 12px; }
+  }
+  @media (max-width:767px){
+    html[dir="rtl"] .hero-inner{ grid-template-areas: "content" "visual"; }
+    html[dir="rtl"] .hero-left{ max-width: 100%; }
+    /* Move Arabic overlays closer to the right edge on small screens */
+    html[dir="rtl"] .hero-overlay-left{ left: auto; right: 8%; top: 40%; }
+    html[dir="rtl"] .overlay-sub{ left: auto; right: 8%; top: calc(40% + 50px); }
+  }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner site">
+      <div class="brand">
+        <a href="index.html" style="display:flex;align-items:center;text-decoration:none">
+          <img src="png/logo_z_lower.png" alt="GameZone logo" class="logo" style="width:36px;height:36px;object-fit:contain;display:block" loading="lazy">
+        </a>
+        <div class="brand-name">GameZone</div>
+      </div>
+
+      <nav class="main-nav" aria-label="Main navigation">
+        <a href="#" class="active" data-i18n="navHome">Home</a>
+        <a href="#features" data-i18n="navGames">Games</a>
+        <a href="#reviews" data-i18n="navReviews">Reviews</a>
+        <a href="#gallery" data-i18n="navGallery">Gallery</a>
+        <a href="#about" data-i18n="navAbout">About</a>
+      </nav>
+      <div style="display:flex;gap:8px;margin-left:auto">
+        <button class="lang-btn active" id="btn-en" data-lang="en">EN</button>
+        <button class="lang-btn" id="btn-ar" data-lang="ar">AR</button>
+      </div>
+    <!-- mobile menu (hidden by default) -->
+    <div id="mobileMenu" style="display:none;padding:12px;background:linear-gradient(180deg, rgba(10,1,45,0.6), rgba(10,1,45,0.3));backdrop-filter:blur(8px)">
+      <div style="display:flex;flex-direction:column;gap:10px;max-width:var(--container);margin:0 auto;padding-inline:24px">
+        <a href="#">Home</a>
+        <a href="#features">Games</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#about">About</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-bg" id="heroBg" aria-hidden="true"></div>
+      <div class="parallax-wrap" id="parallax">
+        <div class="light l1" aria-hidden="true"></div>
+        <div class="light l2" aria-hidden="true"></div>
+      </div>
+
+      <!-- center-left overlay -->
+      <div class="hero-overlay-left" id="overlay-name" data-i18n="overlayName">Hi, I'm Zayed</div>
+      <div class="overlay-sub" id="overlay-sub" data-i18n="overlaySub">See my new game</div>
+      <div class="hero-inner site">
+        <div class="hero-content hero-left">
+          <div class="chip"><span class="text-grad" id="chip-season" data-i18n="newSeason">NEW SEASON</span></div>
+          <h1 class="hero-title" id="hero-title" data-i18n="heroTitle">Enter the Game Zone</h1>
+          <p class="author-line" id="author-line" data-i18n="authorLine">(I'm Zayed)</p>
+          <p><a class="see-games" href="#features" id="see-games" data-i18n="seeGames">(See My New Games)</a></p>
+          <p class="lead" id="hero-lead" data-i18n="heroLead">Suit up. Dive into cosmic arenas and virtual coliseums. Play solo or squad up with friends for leaderboard glory.</p>
+
+         
+
+          <div class="progress-track" aria-hidden="true"><div class="bar"></div></div>
+        </div>
+
+  <div class="hero-visual" style="display:flex;justify-content:center;align-items:center">
+          <!-- decorative card / illustration placeholder -->
+          <div class="card" style="width:420px;height:380px;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px);">
+            <img src="https://images7.alphacoders.com/135/thumb-1920-1358788.png" alt="Hero artwork" style="width:100%;height:100%;object-fit:cover;border-radius:12px;filter:brightness(0.9)" loading="lazy">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="section">
+      <div class="site">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+          <h2 style="margin:0;font-size:32px" id="featured-title" data-i18n="featuredGames">Featured Games</h2>
+        </div>
+
+        <div class="features-grid" id="featuresGrid">
+          <!-- sample cards -->
+          <a class="card" href="top10.html" style="text-decoration:none;color:inherit">
+            <div class="card-thumb"><img src="png/تصميم بدون عنوان.png" alt="My Website" loading="lazy"></div>
+            <h3 id="card1-title" data-i18n="top10Title">Top 10 Game</h3>
+            <p id="card1-desc" data-i18n="top10Desc">العب لعبه توب 10 الان</p>
+            <div class="chip-row"><div class="chip-mini" data-i18n="chipFamily">Family</div><div class="chip-mini" data-i18n="chipTop10">Top10</div></div>
+          </a>
+
+          <article class="card">
+            <div class="card-thumb"><img src="png/14fa64ae-fb55-4284-923f-6527f4a8b857.jpg" alt="game 2" loading="lazy"></div>
+            <h3 id="card2-title" data-i18n="comingSoon">Comming Soon!</h3>
+            <p id="card2-desc" data-i18n="newGame">New Game</p>
+            <div class="chip-row"><div class="chip-mini" data-i18n="chipPlay">Play</div><div class="chip-mini" data-i18n="chipCoOp">Co-Op</div></div>
+          </article>
+
+          <article class="card">
+            <div class="card-thumb"><img src="png/14fa64ae-fb55-4284-923f-6527f4a8b857.jpg" alt="game 3" loading="lazy"></div>
+            <h3 id="card3-title" data-i18n="comingSoon">Comming Soon!</h3>
+            <p id="card3-desc" data-i18n="newGame">New Game.</p>
+            <div class="chip-row"><div class="chip-mini" data-i18n="chipPlay">Play</div><div class="chip-mini" data-i18n="chipEvents">Events</div></div>
+          </article>
+        </div>
+      </div>
+    </section>
+      <dialog class="lightbox" id="lightbox">
+        <img class="lightbox-img" src="" alt="expanded">
+      </dialog>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site footer-row">
+      <div style="display:flex;gap:12px;align-items:center">
+        <div class="logo" style="width:28px;height:28px;font-size:12px">GZ</div>
+        <div style="font-size:14px;color:var(--muted)" id="footer-copy" data-i18n="footerCopy">© 2025 ZayedZone</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="font-size:13px;color:var(--muted);display:flex;gap:12px">
+          <a href="#" style="color:var(--muted)" data-i18n="footerTerms">Terms</a>
+          <a href="#" style="color:var(--muted)" data-i18n="footerPrivacy">Privacy</a>
+        </div>
+        <div class="social-dots">
+                <a class="social-link" href="https://www.instagram.com/_1m6t/"target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                  <div class="dot" title="Instagram"></div>
+                </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+  /* =====================
+     i18n — Arabic / English
+     ===================== */
+  const T = {
+    en: {
+      navHome: "Home",
+      navGames: "Games",
+      navReviews: "Reviews",
+      navGallery: "Gallery",
+      navAbout: "About",
+      newSeason: "NEW SEASON",
+      heroTitle: "Enter the Game Zone",
+      authorLine: "(I'm Zayed)",
+      seeGames: "(See My New Games)",
+      heroLead: "Suit up. Dive into cosmic arenas and virtual coliseums. Play solo or squad up with friends for leaderboard glory.",
+      overlayName: "Hi, I'm Zayed",
+      overlaySub: "See my new game",
+      featuredGames: "Featured Games",
+      top10Title: "Top 10 Game",
+      top10Desc: "Play Top 10 Now",
+      chipFamily: "Family",
+      chipTop10: "Top10",
+      comingSoon: "Coming Soon!",
+      newGame: "New Game",
+      chipPlay: "Play",
+      chipCoOp: "Co-Op",
+      chipEvents: "Events",
+      footerCopy: "© 2025 ZayedZone",
+      footerTerms: "Terms",
+      footerPrivacy: "Privacy"
+    },
+    ar: {
+      navHome: "الرئيسية",
+      navGames: "الألعاب",
+      navReviews: "التقييمات",
+      navGallery: "المعرض",
+      navAbout: "عن",
+      newSeason: "موسم جديد",
+      heroTitle: "ادخل إلى منطقة الألعاب",
+      authorLine: "(أنا زايد)",
+      seeGames: "(شوف ألعابي الجديدة)",
+      heroLead: "استعد. اغطس في الساحات الكونية والحلبات الافتراضية. العب بمفردك أو مع فريقك للحصول على مجد لوحة الترتيب.",
+      overlayName: "أنا زايد",
+      overlaySub: "شوف اخر الجديد",
+      featuredGames: "الألعاب المميزة"  ,
+      top10Title: "لعبة توب 10",
+      top10Desc: "العب لعبة توب 10 الآن",
+      chipFamily: "عائلة",
+      chipTop10: "توب10",
+      comingSoon: "قريباً!",
+      newGame: "لعبة جديدة",
+      chipPlay: "لعب",
+      chipCoOp: "تعاوني",
+      chipEvents: "أحداث",
+      footerCopy: "© 2025 منطقة زايد",
+      footerTerms: "شروط",
+      footerPrivacy: "الخصوصية"
+    }
+  };
+
+  let LANG = localStorage.getItem("index_lang") || "en";
+
+  function applyLang() {
+    const tr = (key) => T[LANG][key] || key;
+    document.documentElement.lang = LANG;
+    document.documentElement.dir = LANG === "ar" ? "rtl" : "ltr";
+    
+    // Update all elements with data-i18n attribute
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+      const key = el.getAttribute("data-i18n");
+      el.textContent = tr(key);
+    });
+    
+    // Update language button active states
+    document.querySelectorAll(".lang-btn").forEach(btn => {
+      btn.classList.toggle("active", btn.getAttribute("data-lang") === LANG);
+    });
+    
+    // Update nav active state
+    document.querySelectorAll(".main-nav a").forEach(link => {
+      link.classList.toggle("active", link.getAttribute("href") === "#");
+    });
+  }
+
+  function setLang(lang) {
+    LANG = lang;
+    localStorage.setItem("index_lang", lang);
+    applyLang();
+  }
+
+  // Language button listeners
+  document.getElementById("btn-en").addEventListener("click", () => setLang("en"));
+  document.getElementById("btn-ar").addEventListener("click", () => setLang("ar"));
+
+  // Initialize on page load
+  applyLang();
+
+  // mobile menu toggle
+  const menuBtn = document.getElementById('menuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  menuBtn && menuBtn.addEventListener('click', ()=>{
+    const open = mobileMenu.style.display !== 'block';
+    mobileMenu.style.display = open ? 'block' : 'none';
+    menuBtn.setAttribute('aria-expanded', String(open));
+  });
+
+  // parallax (mouse move) — respects prefers-reduced-motion
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!prefersReduced){
+    const parallax = document.getElementById('parallax');
+    window.addEventListener('mousemove', (e)=>{
+      const w = window.innerWidth; const h = window.innerHeight;
+      const mx = (e.clientX / w) - 0.5; const my = (e.clientY / h) - 0.5;
+      // subtle translate
+      if(parallax) parallax.style.transform = `translate3d(${mx * 20}px, ${my * 12}px, 0)`;
+      const heroBg = document.getElementById('heroBg');
+      if(heroBg) heroBg.style.backgroundPosition = `${50 + mx*6}% ${10 + my*4}%`;
+    });
+  }
+
+  // simple scroll reveal using IntersectionObserver
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach((entry)=>{
+      if(entry.isIntersecting){
+        entry.target.style.opacity = 1; entry.target.style.transform='none'; io.unobserve(entry.target);
+      }
+    });
+  }, {threshold:0.12});
+  document.querySelectorAll('.card, .thumb, .features-grid article').forEach(el=>{
+    el.style.opacity = 0; el.style.transform = 'translateY(18px)'; io.observe(el);
+  });
+
+  // gallery lightbox (dialog)
+  const galleryGrid = document.getElementById('galleryGrid');
+  const lb = document.getElementById('lightbox');
+  const lbImg = lb.querySelector('.lightbox-img');
+  galleryGrid.querySelectorAll('.thumb img').forEach(img=>{
+    // lazy load images: move data-src -> src
+    const src = img.dataset.src; if(src) img.src = src;
+    img.addEventListener('click', ()=>{
+      lbImg.src = img.src; lb.showModal();
+    });
+  });
+  lb.addEventListener('click', (e)=>{ if(e.target === lb) lb.close(); });
+
+  // make pills filter (demo: just toggle active)
+  document.querySelectorAll('.pill').forEach(p=>p.addEventListener('click', ()=>{
+    document.querySelectorAll('.pill').forEach(x=>x.classList.remove('active')); p.classList.add('active');
+  }));
+
+  // accessibility: close lightbox with ESC
+  document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') lb.close(); });
+  </script>
+</body>
+</html>

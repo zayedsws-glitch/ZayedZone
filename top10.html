@@ -1,0 +1,2247 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>لعبة التوب 10 — Top 10 game</title>
+<style>
+  @font-face {
+    font-family: 'Khalid Art';
+    src: url('https://dl.dropboxusercontent.com/s/2bp0qkwn9kxsv8h/Khalid%20Art%20bold%20Regular.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+  }
+
+  :root{
+    --bg: #070919; /* deep navy */
+    --card: #000000;
+  --muted: rgba(255,255,255,0.9);
+    --ink: #ffffff;
+    --accent: #1e90ff; /* bright blue */
+    --accent-2: #3b82f6;
+    --accent-3: #0ea5e9;
+    --border: #0b1220;
+    --shadow: 0 8px 32px rgba(30,144,255,0.08);
+    --gradient-1: linear-gradient(135deg, #1e90ff, #3b82f6);
+    --gradient-2: linear-gradient(135deg, #0ea5e9, #1e90ff);
+    --gradient-3: linear-gradient(135deg, #05204a, #0b1f3a);
+    --gradient-soft: linear-gradient(135deg, rgba(30,144,255,0.08), rgba(59,130,246,0.06));
+    --neon-glow: 0 0 20px rgba(30,144,255,0.25);
+    --neon-text: 0 0 10px rgba(30,144,255,0.35);
+    --success: #10b981;
+    --button-shadow: 0 4px 6px -1px rgba(124, 58, 237, 0.1), 0 2px 4px -1px rgba(124, 58, 237, 0.06);
+    --card-shadow: 0 8px 24px rgba(124, 58, 237, 0.08);
+    --content-width: min(1100px, 94vw);
+    --space-xs: 0.5rem;
+    --space-sm: 1rem;
+    --space-md: 1.5rem;
+    --space-lg: 2rem;
+    --radius-sm: 0.5rem;
+    --radius-md: 1rem;
+    --radius-lg: 1.5rem;
+  }
+  *{box-sizing:border-box}
+  html,body{
+    height:100%;
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family: "Khalid Art", system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Kufi Arabic", "Noto Naskh Arabic UI", Tahoma, sans-serif;
+    background: linear-gradient(180deg, #020617 0%, #071229 100%);
+    position: relative;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 20% 30%, rgba(30, 144, 255, 0.15) 0%, transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.15) 0%, transparent 40%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  main {
+    position: relative;
+    z-index: 1;
+  }
+  a{color:var(--ink);text-decoration:none}
+  header{
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    padding: var(--space-sm) var(--space-md);
+    background: rgba(26, 18, 58, 0.8);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  box-shadow: 0 4px 20px rgba(30, 144, 255, 0.12);
+  }
+  .header-wrap{
+    max-width: var(--content-width);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+  }
+  .brand{
+    font-weight: 900;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    font-size: 1.25rem;
+  }
+  .lang-switch{
+    display: flex;
+    gap: var(--space-xs);
+    align-items: center;
+    background: var(--accent-3);
+    padding: 4px;
+    border-radius: var(--radius-md);
+  }
+  .lang-btn{
+    cursor: pointer;
+    padding: var(--space-xs) var(--space-sm);
+    border: none;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    font-weight: 700;
+    color: var(--ink);
+    transition: all 0.3s ease;
+  }
+  .lang-btn.active{
+    background: rgba(255,255,255,0.06);
+    color: var(--ink);
+    box-shadow: var(--button-shadow);
+  }
+  /* enhanced top bar: glass panel with Home link and coming-soon pills */
+  .top-bar{
+    max-width: var(--content-width);
+    margin: 12px auto;
+    display:flex;
+    gap:12px;
+    align-items:center;
+    padding:8px 12px;
+    justify-content:flex-end; /* align to the right for RTL */
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.03);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+    backdrop-filter: blur(8px);
+  }
+  .top-bar .top-link a{ display:inline-flex; align-items:center; gap:8px; padding:8px 14px; border-radius:10px; background: linear-gradient(90deg, rgba(30,144,255,0.06), rgba(59,130,246,0.04)); color:var(--ink); text-decoration:none; font-weight:800; box-shadow: var(--button-shadow); }
+  .top-bar .top-link a:hover{ transform: translateY(-3px); box-shadow: var(--neon-glow); }
+  .top-bar .top-link .home-icon{ width:18px; height:18px; display:inline-block; opacity:0.95 }
+  .coming-box{ padding:8px 12px; border-radius:999px; background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.03); color:var(--muted); font-weight:800; font-size:13px }
+  .coming-box:hover{ color:var(--ink); background: linear-gradient(90deg, rgba(30,144,255,0.06), rgba(59,130,246,0.04)); box-shadow: 0 8px 26px rgba(30,144,255,0.06) }
+  main{
+    max-width: var(--content-width);
+    margin: var(--space-lg) auto;
+    padding: var(--space-md);
+  }
+  .screen{display:none}
+  .screen.active{display:block}
+  /* Home center card */
+  .center-wrap{min-height:calc(100vh - 68px); display:flex; align-items:center; justify-content:center}
+  .center-card{
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--card-shadow);
+    padding: var(--space-lg);
+    width: min(560px, 94vw);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .center-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-1);
+  }
+  .center-card h1{
+    margin: var(--space-xs) 0 var(--space-md) 0;
+    font-size: 2rem;
+    color: var(--ink);
+  }
+  .big-actions{
+    display: grid;
+    gap: var(--space-sm);
+    margin-top: var(--space-md);
+  }
+  /* Hero styles */
+  .hero{ 
+    padding: calc(8vh) 0; 
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: url('https://www.skyweaver.net/images/media/wallpapers/wallpaper2.jpg') center/cover no-repeat fixed;
+  }
+  
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 1;
+  }
+  
+  .hero-inner {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  .hero-inner{
+    max-width: var(--content-width);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: var(--space-lg);
+    align-items: center;
+  }
+  .hero-content{ color: var(--ink); }
+  .hero h1{ font-size: clamp(28px, 4vw, 44px); margin:0 0 var(--space-sm) 0; line-height:1.05 }
+    .hero p.hero-sub{ 
+      color: rgba(255,255,255,0.9); 
+      margin:0 0 var(--space-md) 0; 
+      font-size: clamp(14px,2.2vw,16px);
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+  
+    .hero-ctas{ 
+      display:flex; 
+      gap:12px; 
+      flex-wrap:wrap;
+      justify-content: center;
+    }
+  
+    .glow {
+      text-shadow: 0 0 10px rgba(255,255,255,0.5),
+                   0 0 20px rgba(255,255,255,0.3),
+                   0 0 30px rgba(255,255,255,0.2);
+    }
+  
+    .glow-btn {
+      box-shadow: 0 0 10px rgba(var(--primary-rgb), 0.5),
+                  0 0 20px rgba(var(--primary-rgb), 0.3);
+    }
+  
+    .hero .btn.ghost {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(5px);
+      border-color: rgba(255,255,255,0.2);
+    }
+  
+    .hero .btn.ghost:hover {
+      background: rgba(255,255,255,0.2);
+      border-color: rgba(255,255,255,0.3);
+    }
+  .hero-visual{
+    background: linear-gradient(180deg, rgba(30,144,255,0.08), rgba(59,130,246,0.04));
+    border-radius: 18px;
+    padding: 18px;
+    border: 1px solid rgba(30,144,255,0.12);
+    min-height:340px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .hero-card{
+    width:100%; height:100%; border-radius:12px; background:linear-gradient(180deg,#021226,#07203a);
+    box-shadow: var(--neon-glow) inset; display:block;
+  }
+  @media (max-width:900px){ .hero-inner{ grid-template-columns:1fr; padding:0 18px } }
+  .btn{
+    cursor: pointer; 
+    font-weight: 800; 
+    padding: 12px 24px; 
+    border-radius: var(--radius-md); 
+    border: 2px solid var(--accent);
+    background: rgba(0, 0, 0, 0.95);
+    color: var(--ink);
+    transition: all 0.3s ease;
+    box-shadow: var(--neon-glow);
+    position: relative;
+    overflow: hidden;
+    text-shadow: var(--neon-text);
+  }
+  .btn:focus{
+    outline: 3px solid rgba(30,144,255,0.25);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(30,144,255,0.06), var(--neon-glow);
+  }
+  .btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--gradient-1);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .btn:hover::before {
+    opacity: 0.2;
+  }
+  .btn.primary{
+    background: var(--gradient-1);
+    border: none;
+    color: white;
+    box-shadow: var(--neon-glow);
+  }
+  .btn.ghost{
+    background: transparent;
+    border: 2px solid var(--accent);
+    box-shadow: var(--neon-glow);
+  }
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--neon-glow), 0 8px 16px rgba(30, 144, 255, 0.18);
+  }
+  .btn:active{transform:translateY(1px)}
+  
+  /* Make control buttons and accordion headers keyboard accessible */
+  .control-btn:focus, .round-header:focus {
+    outline: 3px solid rgba(30,144,255,0.2);
+    outline-offset: 2px;
+  }
+  .muted{color:var(--ink); font-size:14px}
+  .divider{
+    height:2px; 
+    background: var(--gradient-2);
+    margin:14px 0;
+    border-radius:2px;
+  }
+
+  /* How-to slanted card */
+  .slanted{
+    background: var(--gradient-1);
+    color: white;
+    border: none;
+  filter: drop-shadow(6px 10px 0 rgba(30,144,255,0.12));
+    clip-path: polygon(8% 0, 100% 0, 92% 100%, 0 100%);
+    border-radius: 16px;
+    padding: 32px;
+    backdrop-filter: blur(8px);
+  }
+  .howto-wrap{display:flex; align-items:center; justify-content:center; min-height:calc(100vh - 100px)}
+  .howto-card{width:min(850px, 94vw)}
+
+  /* Setup */
+  .grid{
+    display: grid;
+    gap: var(--space-md);
+  }
+  .col-2{
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-lg);
+  }
+  .col-3{
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+  }
+  .card{
+    background: rgba(0, 0, 0, 0.95);
+    border: 2px solid var(--accent);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--neon-glow);
+    padding: var(--space-lg);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(12px);
+    color: var(--ink);
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+      linear-gradient(45deg, 
+        rgba(30, 144, 255, 0.06) 0%, 
+        rgba(59, 130, 246, 0.06) 50%,
+        rgba(14, 165, 233, 0.06) 100%
+      );
+    z-index: 0;
+  }
+  /* Setup layout: bank + game side-by-side, teams row below */
+  .setup-layout{ display:grid; grid-template-columns: 1fr 420px; gap:20px; align-items:start }
+  /* Bank card and builder expand vertically (no internal scroll) */
+  #bank-card{ max-height: none; overflow: visible; padding-right:0 }
+  /* Builder uses grid to lay out answer inputs side-by-side; allow it to grow */
+  #builder{ max-height: none; overflow: visible; padding-right:0; display: grid; grid-template-columns: repeat(2, 1fr); gap:12px; align-items:start }
+    /* Each answer card becomes a compact grid item (two columns layout) */
+    #builder .grid.col-2.card{ margin-top:0; padding:10px; background: rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.03); }
+    /* Make inputs full width inside the compact card */
+    #builder .grid.col-2.card input[type="text"]{ width:100%; box-sizing:border-box }
+    @media (max-width:700px){ #builder{ grid-template-columns:1fr } }
+  #game-card{ min-height:320px }
+  .teams-row{ display:grid; grid-template-columns: repeat(2, 1fr); gap:20px; margin-top:20px }
+  @media (max-width:980px){ .setup-layout{ grid-template-columns:1fr; } .teams-row{ grid-template-columns:1fr } }
+  /* Team card inputs (visual) */
+  .team-card{
+    display:flex;
+    gap:12px;
+    align-items:center;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius: 12px;
+    padding: 12px;
+    border: 1px solid rgba(255,255,255,0.04);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+  }
+  .team-card-media{ flex: 0 0 72px; display:flex; align-items:center; justify-content:center }
+  .team-avatar{ width:64px; height:64px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-weight:800; color:var(--ink); background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)); border:1px solid rgba(255,255,255,0.06); font-size:20px; transition: background 220ms ease, color 220ms ease, border-color 220ms ease }
+  .team-card-body{ flex:1 }
+  .team-card-body label{ display:block; margin-bottom:6px; color:var(--muted); font-weight:700 }
+  .team-card-body input[type="text"]{ width:100%; padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.06); background: rgba(0,0,0,0.6); color:var(--ink) }
+  .team-card .color-options{ margin-top:8px; display:flex; gap:8px; flex-wrap:wrap }
+  .team-card .color-option{ display:flex; gap:8px; align-items:center; cursor:pointer; padding:6px 8px; border-radius:8px; background: rgba(255,255,255,0.01); border:1px solid rgba(255,255,255,0.02) }
+  .team-card .color-option.selected{ box-shadow: 0 4px 10px rgba(0,0,0,0.6); transform: translateY(-2px); border-color: rgba(30,144,255,0.25) }
+  .team-card .color-circle{ width:18px; height:18px; border-radius:50%; border:1px solid rgba(0,0,0,0.3) }
+  @media (max-width:700px){ .team-card{ flex-direction:row; gap:10px } .team-card-media{ flex:0 0 56px } .team-avatar{ width:48px; height:48px } }
+  .card > * {
+    position: relative;
+    z-index: 1;
+  }
+  .card h2 {
+    color: white;
+    text-shadow: var(--neon-text);
+    margin-bottom: var(--space-md);
+  }
+  @media (max-width:900px){ 
+    .col-2,.col-3{
+      grid-template-columns:1fr;
+      gap: var(--space-md);
+    }
+    .header-wrap{
+      flex-direction:column;
+      text-align:center;
+      gap: var(--space-sm);
+    }
+    .lang-switch{justify-content:center}
+    .scoreboard{
+      position:static;
+      justify-content:center;
+      margin-bottom: var(--space-sm);
+    }
+    .controls{
+      flex-direction:column;
+      gap: var(--space-sm);
+    }
+  }
+  @media (max-width:480px) {
+    .center-card{padding:16px}
+    .center-card h1{font-size:24px}
+    .slanted{clip-path: polygon(4% 0, 100% 0, 96% 100%, 0 100%)}
+  }
+  .card{background:var(--card); border:1px solid var(--border); border-radius:16px; box-shadow:var(--shadow); padding:clamp(12px, 3vw, 16px)}
+  label{display:block; font-size:13px; margin-bottom:6px; color:var(--ink)}
+  input[type="text"], select, input[type="color"]{
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--accent);
+    background: rgba(0, 0, 0, 0.95);
+    color: var(--ink);
+    outline: none;
+  }
+  input[type="text"]::placeholder, select::placeholder {
+    color: var(--muted);
+  }
+  label {
+    color: var(--ink);
+  }
+  .row{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+  .rounds-box{display:grid; gap:10px}
+  .round-title{font-weight:900; margin:6px 0 8px 0}
+  .color-row{display:flex; gap:10px; align-items:center}
+  .color-options{display:flex; gap:12px; flex-wrap:wrap}
+  .color-option{display:flex; align-items:center; gap:8px; cursor:pointer; padding:8px 12px; border-radius:8px; transition:0.2s}
+  .color-option:hover{background:rgba(255,255,255,0.06)}
+  .color-option.selected{background:rgba(255,255,255,0.12); box-shadow: inset 0 0 0 2px rgba(255,255,255,0.06); border-radius:8px}
+  .color-option.selected .color-circle{box-shadow:0 0 0 3px rgba(0,0,0,0.35)}
+  .color-circle{width:20px; height:20px; border-radius:50%; border:2px solid rgba(255,255,255,0.5); display:inline-block}
+
+  /* Game Layout */
+  .stage {
+    padding: 20px;
+    height: calc(100vh - 100px);
+  }
+
+  .question {
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  .board {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .col {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .tile {
+    background: rgba(0, 0, 0, 0.95);
+    border-radius: 12px;
+    padding: 15px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 15px;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+
+  .tile:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .tile.found {
+    background: var(--accent);
+  }
+
+  .rank {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-weight: bold;
+  }
+
+  .points {
+    font-size: 0.8em;
+    opacity: 0.8;
+    margin-top: 4px;
+  }
+
+  .control-panel {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 300px;
+    background: rgba(0, 0, 0, 0.9);
+    border-radius: 15px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+  }
+
+  /* Responsive adjustments for smaller screens */
+  @media (max-width: 980px) {
+    .control-panel {
+      position: static; /* flow with document on smaller screens */
+      top: auto;
+      right: auto;
+      left: auto;
+      width: 100%;
+      max-width: none;
+      margin: 0 auto 16px auto;
+      border-radius: 12px;
+      padding: 14px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.45);
+    }
+
+    /* Remove the forced right margin so the board can use full width */
+    .board-container { margin-right: 0; padding-right: 0; }
+
+    /* Make the board and columns stack naturally and use full width */
+    .board { width: 100%; padding: 8px; }
+
+    /* Ensure the hero background doesn't force heavy repaint on phones */
+    .hero { background-attachment: scroll; }
+  }
+
+  @media (max-width: 480px) {
+    header { padding: 10px 12px; }
+    .header-wrap { flex-direction: column; gap: 8px; }
+    .hero-inner { padding: 12px; grid-template-columns: 1fr; }
+    .center-card{ padding: 14px }
+    .team-card { gap: 8px; }
+    .tile{ min-height:56px; padding: 12px; font-size: 14px }
+    .control-panel { padding: 12px; }
+    .board { gap: 12px; }
+  }
+
+  .control-panel-title {
+    color: var(--ink);
+    font-size: 1.2em;
+    font-weight: bold;
+    padding: 5px 0 15px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+    margin: 0 -20px;
+    padding: 0 20px 15px 20px;
+  }
+
+  .team-scores {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .team-score {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    transition: 0.2s;
+  }
+
+  .team-score.current {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .team-score .team-name {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .team-score .team-indicator {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.9em;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+
+  .team-score .score {
+    font-size: 1.4em;
+    font-weight: 900;
+    min-width: 40px;
+    text-align: center;
+  }
+
+  .controls-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 5px;
+  }
+
+  .control-btn {
+    padding: 16px 12px;
+    border-radius: 12px;
+    border: none;
+    color: var(--ink);
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95em;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .control-btn.wrong {
+    background: linear-gradient(135deg, #9333ea 0%, #7928ca 100%);
+  }
+
+  .control-btn.switch {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  }
+
+  .control-btn.undo {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  }
+
+  .control-btn.reveal {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  }
+
+  .control-btn:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  .game-info {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    border-radius: 12px;
+    text-align: center;
+  }
+
+  .round-display {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: var(--ink);
+    opacity: 0.9;
+  }
+
+  .divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 5px 0;
+  }
+
+  /* Game Layout */
+  .board-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    margin-right: 320px; /* Make space for control panel */
+  }
+
+  .game-title {
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: center;
+    padding: 15px 30px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 12px;
+    margin-bottom: 10px;
+  }
+
+  .board {
+    display: flex; 
+    align-items: center; 
+    gap: var(--space-sm); 
+    padding: var(--space-sm) var(--space-md); 
+    background: rgba(0, 0, 0, 0.95);
+    border: 2px solid var(--accent);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--neon-glow);
+    backdrop-filter: blur(8px);
+    position: relative;
+    overflow: hidden;
+  }
+  .score-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, 
+      rgba(30,144,255,0.06), 
+      rgba(59,130,246,0.06)
+    );
+    z-index: 0;
+  }
+  .score-name{
+    position: relative;
+    padding: var(--space-xs) var(--space-sm); 
+    border: none;
+    border-radius: var(--radius-sm);
+    background: var(--gradient-1);
+    color: var(--ink);
+    font-weight: bold;
+    box-shadow: var(--neon-glow);
+    text-shadow: var(--neon-text);
+  }
+  .score-pts{
+    position: relative;
+    font-size: 1.5rem;
+    color: var(--ink);
+    font-weight: 900;
+    text-shadow: var(--neon-text);
+  }
+  .turn{
+    outline:3px solid var(--accent);
+    background: var(--gradient-1);
+    color: white;
+  box-shadow: 0 0 0 6px rgba(30,144,255,0.18);
+  }
+  .round-pill{
+    padding:8px 16px;
+    background: rgba(0,0,0,0.95);
+    border:2px solid var(--accent);
+    border-radius:999px;
+    font-weight:900;
+    color: var(--ink);
+    box-shadow: var(--button-shadow);
+  }
+
+  /* Game board */
+  .stage{min-height:calc(100vh - 140px); padding-top:14px; display:flex; flex-direction:column; align-items:center; gap:clamp(8px, 2vw, 16px)}
+  .question{font-size:clamp(16px, 4vw, 20px); font-weight:900}
+  .board{display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:clamp(20px, 4vw, 46px); width:min(980px, 94vw);}
+  .col{display:grid; gap:clamp(8px, 2vw, 12px)}
+  .tile{
+    min-height: 72px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    text-align: center; 
+    font-weight: 900; 
+    font-size: clamp(14px, 3vw, 18px); 
+    line-height: 1.2; 
+    color: var(--ink);
+    background: rgba(0, 0, 0, 0.95); 
+    border: 2px solid var(--accent);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--neon-glow);
+    position: relative; 
+    padding: var(--space-md);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(8px);
+    overflow: hidden;
+  }
+  .tile::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--gradient-1);
+    opacity: 0.7;
+  }
+  .tile::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--gradient-2);
+    opacity: 0.7;
+  }
+  .tile:not(.found){
+    cursor:pointer;
+  }
+  .tile:not(.found):hover {
+    transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(30,144,255,0.15);
+    border-color: var(--accent-2);
+  }
+  .tile .rank{
+    position:absolute;
+    top:8px;
+    inset-inline-start:10px;
+    font-size:12px;
+    color:var(--ink);
+    font-weight:900;
+    background: var(--accent-2);
+    padding: 4px 8px;
+    border-radius: 8px;
+  }
+  .tile.found{
+    background: var(--gradient-2);
+    border-color: var(--accent);
+    color: var(--ink);
+  }
+  .tile .points{display:block; margin-top:4px; font-size:12px; opacity:.9}
+  .controls{display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:center; margin-top:6px}
+
+  .summary-list{list-style:none; padding:0; margin:0; display:grid; grid-template-columns:1fr 1fr; gap:10px}
+  .summary-list li{background: rgba(0,0,0,0.95); border:1px solid rgba(255,255,255,0.04); border-radius:12px; padding:10px; box-shadow:var(--card-shadow); color:var(--ink)}
+  .center{display:flex; align-items:center; justify-content:center}
+  
+  /* Answers Catalog */
+  .answers-section { 
+    margin: 24px 0;
+    padding: 20px;
+    background: rgba(0,0,0,0.95);
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: var(--card-shadow);
+    color: var(--ink);
+  }
+  
+  .answers-section h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    color: var(--ink);
+  }
+  
+  .answers-controls {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  
+  .btn.small {
+    font-size: 14px;
+    padding: 4px 12px;
+  }
+  
+  .round-item {
+    margin-bottom: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 4px;
+    background: rgba(255,255,255,0.05);
+  }
+  
+  .round-header {
+    padding: 12px;
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    color: var(--ink);
+  }
+  
+  .round-header::before {
+    content: '▸';
+    display: inline-block;
+    margin-right: 8px;
+    transition: transform 0.2s;
+    color: var(--ink);
+  }
+  
+  .round-item.expanded .round-header::before {
+    transform: rotate(90deg);
+  }
+  
+  .round-content {
+    display: none;
+    padding: 12px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  
+  .round-item.expanded .round-content {
+    display: block;
+  }
+  
+  .answer-list {
+    list-style-position: inside;
+    margin: 0;
+    padding: 0;
+    color: var(--ink);
+  }
+  
+  .answer-list li {
+    padding: 4px 0;
+  }
+  
+  [dir="rtl"] .round-header::before {
+    margin-right: 0;
+    margin-left: 8px;
+  }
+  
+  html[dir="rtl"] .answer-list {
+    text-align: right;
+  }
+
+  /* Categories picker (Game Settings) */
+  .categories-root{ margin-bottom:14px }
+  .categories-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap:10px;
+    align-items:stretch;
+  }
+  .category-card{
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border:1px solid rgba(255,255,255,0.04);
+    padding:10px;
+    border-radius:10px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    cursor:pointer;
+    transition: transform 360ms cubic-bezier(.2,.9,.2,1), box-shadow 360ms ease, border-color 200ms ease;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+    position:relative;
+    overflow:hidden;
+  }
+  .category-card .emoji{ font-size:20px }
+  .category-card .name{ font-weight:800; font-size:13px }
+  .category-card:hover{ transform: translateY(-6px) scale(1.02); border-color: rgba(30,144,255,0.18); }
+  .category-card.selected{ transform: translateY(-8px) scale(1.04); box-shadow: 0 18px 50px rgba(30,144,255,0.16); border-color: var(--accent-2); }
+
+  /* Cinematic shine/pulse when selected */
+  .category-card::after{
+    content:''; position:absolute; left:-120%; top:0; width:40%; height:100%; background: linear-gradient(120deg, rgba(255,255,255,0.06), rgba(255,255,255,0.12), rgba(255,255,255,0.06)); transform: skewX(-20deg); opacity:0; pointer-events:none;
+  }
+  .category-card.pulse::after{ animation: shine 900ms ease forwards; }
+  @keyframes shine{ 0%{ left:-120%; opacity:0 } 50%{ left:60%; opacity:0.85 } 100%{ left:120%; opacity:0 } }
+
+  @media (prefers-reduced-motion: reduce){
+    .category-card, .category-card::after{ transition:none; animation:none }
+  }
+</style>
+</head>
+<body>
+  <!-- Embedded default bank JSON as a fallback when fetch() isn't available (file://) -->
+  <script id="default-bank-data" type="application/json">
+[
+    {
+      "id": "أنمي-أشهر-أبطال-أنمي-شونن",
+      "category": "أنمي",
+      "title": "أشهر أبطال أنمي شونن",
+      "answers": [
+        { "text": "ناروتو أوزوماكي" },
+        { "text": "مونكي دي لوفي" },
+        { "text": "سون غوكو" },
+        { "text": "إيرين ييغر" },
+        { "text": "تانجيرو كامادو" },
+        { "text": "إدوارد إلريك" },
+        { "text": "ساسكي أوتشيها" },
+        { "text": "ليفاي أكرمان" },
+        { "text": "غون فريكس" },
+        { "text": "سايتاما" }
+      ]
+    },
+    {
+      "id": "أنمي-أشهر-سلاسل-أنمي",
+      "category": "أنمي",
+      "title": "أشهر سلاسل أنمي",
+      "answers": [
+        { "text": "ون بيس" },
+        { "text": "ناروتو" },
+        { "text": "دراغون بول" },
+        { "text": "هجوم العمالقة" },
+        { "text": "ديث نوت" },
+        { "text": "بليتش" },
+        { "text": "قاتل الشياطين" },
+        { "text": "بطلي الأكاديمي" },
+        { "text": "ون بنش مان" },
+        { "text": "هنتر × هنتر" }
+      ]
+    },
+    {
+      "id": "أنمي-أفلام-أنمي-معروفة",
+      "category": "أنمي",
+      "title": "أفلام أنمي معروفة",
+      "answers": [
+        { "text": "المخطوفة" },
+        { "text": "اسمك" },
+        { "text": "قلعة هاول المتحركة" },
+        { "text": "الأميرة مونونوكي" },
+        { "text": "جاري توتورو" },
+        { "text": "كيكي لخدمة التوصيل" },
+        { "text": "مقبرة اليراعات" },
+        { "text": "القلعة في السماء" },
+        { "text": "الطقس معك" },
+        { "text": "أطفال الذئاب" }
+      ]
+    },
+    {
+      "id": "مسلسلات-مسلسلات-عربية-شهيرة",
+      "category": "مسلسلات",
+      "title": "مسلسلات عربية شهيرة",
+      "answers": [
+        { "text": "باب الحارة" },
+        { "text": "طاش ما طاش" },
+        { "text": "الهيبة" },
+        { "text": "العاصوف" },
+        { "text": "الاختيار" },
+        { "text": "ليالي الحلمية" },
+        { "text": "شباب البومب" },
+        { "text": "يوميات جميل وهناء" },
+        { "text": "مرايا" },
+        { "text": "ضيعة ضايعة" }
+      ]
+    },
+    {
+      "id": "مسلسلات-مسلسلات-أجنبية-شهيرة",
+      "category": "مسلسلات",
+      "title": "مسلسلات أجنبية شهيرة",
+      "answers": [
+        { "text": "فريندز" },
+        { "text": "بريكينغ باد" },
+        { "text": "صراع العروش" },
+        { "text": "ذا أوفيس" },
+        { "text": "لوست" },
+        { "text": "شيرلوك" },
+        { "text": "سترينجر ثينغز" },
+        { "text": "هاوس" },
+        { "text": "ذا كراون" },
+        { "text": "بريزن بريك" }
+      ]
+    },
+    {
+      "id": "مسلسلات-مسلسلات-تركية-معروفة",
+      "category": "مسلسلات",
+      "title": "مسلسلات تركية معروفة",
+      "answers": [
+        { "text": "قيامة أرطغرل" },
+        { "text": "العهد" },
+        { "text": "وادي الذئاب" },
+        { "text": "العشق الممنوع" },
+        { "text": "الحفرة" },
+        { "text": "القرن العظيم" },
+        { "text": "الطبيب المعجزة" },
+        { "text": "قيامة عثمان" },
+        { "text": "حب أعمى" },
+        { "text": "ابنة السفير" }
+      ]
+    },
+    {
+      "id": "كرتون-أفلام-ديزني-الكلاسيكية",
+      "category": "كرتون",
+      "title": "أفلام ديزني الكلاسيكية",
+      "answers": [
+        { "text": "الأسد الملك" },
+        { "text": "علاء الدين" },
+        { "text": "الجميلة والوحش" },
+        { "text": "هرقل" },
+        { "text": "مولان" },
+        { "text": "بوكاهونتس" },
+        { "text": "أحدب نوتردام" },
+        { "text": "طرزان" },
+        { "text": "سندريلا" },
+        { "text": "بياض الثلج والأقزام السبعة" }
+      ]
+    },
+    {
+      "id": "كرتون-كرتون-نيكولوديون",
+      "category": "كرتون",
+      "title": "كرتون نيكولوديون",
+      "answers": [
+        { "text": "سبونج بوب سكوير بانتس" },
+        { "text": "أفاتار أسطورة أنج" },
+        { "text": "الأهل السحريون" },
+        { "text": "مغامرات جيمي نيوترون" },
+        { "text": "داني الشبح" },
+        { "text": "روجراتس" },
+        { "text": "هي آرنولد!" },
+        { "text": "كات دوج" },
+        { "text": "رن وستيمبي" },
+        { "text": "بطاريق مدغشقر" }
+      ]
+    },
+    {
+      "id": "كرتون-كرتون-كرتون-نتورك",
+      "category": "كرتون",
+      "title": "كرتون كرتون نتورك",
+      "answers": [
+        { "text": "فتيات القوة" },
+        { "text": "بن تن" },
+        { "text": "وقت المغامرة" },
+        { "text": "غامبول" },
+        { "text": "ساموراي جاك" },
+        { "text": "مختبر دكستر" },
+        { "text": "جوني برافو" },
+        { "text": "كوريج الجبان" },
+        { "text": "عم جدو" },
+        { "text": "ستيفن يونيفرس" }
+      ]
+    },
+    {
+      "id": "أشياء-عامة-أدوات-منزلية-شائعة",
+      "category": "أشياء عامة",
+      "title": "أدوات منزلية شائعة",
+      "answers": [
+        { "text": "ملعقة" },
+        { "text": "شوكة" },
+        { "text": "سكين" },
+        { "text": "طبق" },
+        { "text": "كوب" },
+        { "text": "إبريق" },
+        { "text": "قدر" },
+        { "text": "مقلاة" },
+        { "text": "خلاط" },
+        { "text": "مصفاة" }
+      ]
+    },
+    {
+      "id": "أشياء-عامة-فواكه-معروفة",
+      "category": "أشياء عامة",
+      "title": "فواكه معروفة",
+      "answers": [
+        { "text": "تفاح" },
+        { "text": "موز" },
+        { "text": "برتقال" },
+        { "text": "عنب" },
+        { "text": "مانجو" },
+        { "text": "فراولة" },
+        { "text": "أناناس" },
+        { "text": "كيوي" },
+        { "text": "بطيخ" },
+        { "text": "رمان" }
+      ]
+    },
+    {
+      "id": "أشياء-عامة-رياضات-شهيرة",
+      "category": "أشياء عامة",
+      "title": "رياضات شهيرة",
+      "answers": [
+        { "text": "كرة القدم" },
+        { "text": "كرة السلة" },
+        { "text": "التنس" },
+        { "text": "كرة الطائرة" },
+        { "text": "السباحة" },
+        { "text": "الجري" },
+        { "text": "الملاكمة" },
+        { "text": "الكاراتيه" },
+        { "text": "تنس الطاولة" },
+        { "text": "كرة اليد" }
+      ]
+    },
+    {
+      "id": "الإمارات-مدن-في-الإمارات",
+      "category": "الإمارات",
+      "title": "مدن في الإمارات",
+      "answers": [
+        { "text": "أبوظبي" },
+        { "text": "دبي" },
+        { "text": "الشارقة" },
+        { "text": "عجمان" },
+        { "text": "أم القيوين" },
+        { "text": "رأس الخيمة" },
+        { "text": "الفجيرة" },
+        { "text": "العين" },
+        { "text": "خورفكان" },
+        { "text": "دبا الفجيرة" }
+      ]
+    },
+    {
+      "id": "الإمارات-معالم-إماراتية-بارزة",
+      "category": "الإمارات",
+      "title": "معالم إماراتية بارزة",
+      "answers": [
+        { "text": "برج خليفة" },
+        { "text": "برج العرب" },
+        { "text": "جامع الشيخ زايد الكبير" },
+        { "text": "متحف اللوفر أبوظبي" },
+        { "text": "دبي مول" },
+        { "text": "قناة دبي المائية" },
+        { "text": "دار أوبرا دبي" },
+        { "text": "جزيرة ياس" },
+        { "text": "القرية العالمية" },
+        { "text": "متحف الاتحاد" }
+      ]
+    },
+    {
+      "id": "الإمارات-أكلات-إماراتية-تقليدية",
+      "category": "الإمارات",
+      "title": "أكلات إماراتية تقليدية",
+      "answers": [
+        { "text": "الهريس" },
+        { "text": "المجبوس" },
+        { "text": "الثريد" },
+        { "text": "البلاليط" },
+        { "text": "اللقيمات" },
+        { "text": "الخبيص" },
+        { "text": "الجشيد" },
+        { "text": "المالح" },
+        { "text": "الرقاق" },
+        { "text": "العصيد" }
+      ]
+    },
+    {
+      "id": "عربي-أمثال-عربية-مشهورة",
+      "category": "عربي",
+      "title": "أمثال عربية مشهورة",
+      "answers": [
+        { "text": "على قد لحافك مد رجليك" },
+        { "text": "اليد الواحدة لا تصفق" },
+        { "text": "درهم وقاية خير من قنطار علاج" },
+        { "text": "من جد وجد" },
+        { "text": "الصبر مفتاح الفرج" },
+        { "text": "العقل زينة" },
+        { "text": "الكتاب يقرأ من عنوانه" },
+        { "text": "في التأني السلامة وفي العجلة الندامة" },
+        { "text": "كما تدين تدان" },
+        { "text": "الجار قبل الدار" }
+      ]
+    },
+    {
+      "id": "عربي-شعراء-عرب-مشهورون",
+      "category": "عربي",
+      "title": "شعراء عرب مشهورون",
+      "answers": [
+        { "text": "المتنبي" },
+        { "text": "أبو الطيب المتنبي" },
+        { "text": "نزار قباني" },
+        { "text": "جبران خليل جبران" },
+        { "text": "عنترة بن شداد" },
+        { "text": "ابن الفارض" },
+        { "text": "الأخطل الصغير" },
+        { "text": "البحتري" },
+        { "text": "المعري" },
+        { "text": "أحمد شوقي" }
+      ]
+    }
+]
+  </script>
+  <header>
+    <div class="header-wrap">
+      <div class="brand">
+        <a href="index.html" style="display:flex;align-items:center;text-decoration:none">
+          <img src="png/logo_z_lower.png" alt="GameZone logo" class="logo" style="width:36px;height:36px;object-fit:contain;display:block" loading="lazy">
+        </a>
+        <div id="brand-title">لعبة التوب 10</div>
+      </div>
+      <div class="lang-switch">
+        <button class="lang-btn" id="btn-ar">عربي</button>
+        <button class="lang-btn" id="btn-en">English</button>
+      </div>
+    </div>
+  </header>
+  <!-- Small top bar: Home link + coming soon boxes -->
+  <div class="top-bar" role="navigation" aria-label="Top quick links">
+    <div style="display:flex;gap:12px;align-items:center">
+    </div>
+    <div class="top-link">
+          <a href="index.html" id="home-bar" aria-label="Home">
+            <!-- simple home icon -->
+            <svg class="home-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M3 10.5L12 4l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V10.5z" fill="currentColor" opacity="0.95"></path>
+            </svg>
+            <span class="home-label">Home</span>
+          </a>
+        </div>
+      </div>
+  </div>
+  <!-- Scoreboard will be created dynamically when the game starts -->
+  <main>
+    <!-- HOME (hero) -->
+    <section id="home" class="screen active">
+      <div class="hero">
+        <div class="hero-inner">
+          <div class="hero-content">
+            <h1 id="home-title" class="glow">مرحبًا بك في لعبة التوب 10</h1>
+            <p class="hero-sub" id="home-sub">اختر جولة من الإعداد أو ابدأ بجولة سريعة — تعاون مع فريقك للوصول إلى أفضل الإجابات.</p>
+            <div class="hero-ctas">
+              <button class="btn primary glow-btn" id="home-start">بدء اللعب</button>
+              <button class="btn ghost" id="home-how">كيفية اللعب</button>
+              <button class="btn ghost" id="home-bank">أجوبة بنكية</button>
+            </div>
+            <div style="height:18px"></div>
+          </div>
+          <div class="hero-visual">
+            <div class="hero-card" aria-hidden="true"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW-TO -->
+    <section id="howto" class="screen">
+      <div class="howto-wrap">
+        <div class="howto-card slanted">
+          <h2 id="howto-title" style="margin-top:0">كيفية اللعب</h2>
+          <div class="divider"></div>
+          <p id="howto-text" style="font-size:16px; line-height:1.7">
+            تتكون اللعبة من فريقين. لديك لوحة تضم أفضل 10 إجابات لسؤال الجولة. اضغط على البلاط لكشف الإجابة وإضافة نقاطها للفريق الحالي (الترتيب = النقاط: #1 = 1 … #10 = 10).<br/>
+            بعد كشف إجابة صحيحة، ينتقل الدور تلقائيًا إلى الفريق التالي. عند الخطأ/التمرير، ينتقل الدور أيضًا للفريق التالي. بعد انتهاء جميع البلاطات أو الضغط على “إنهاء الجولة”، تظهر لوحة ملخص ثم تنتقل للجولة التالية.
+          </p>
+          <div class="divider"></div>
+          <div class="center"><button class="btn" id="howto-back">رجوع</button></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BANK ANSWERS -->
+    <section id="bank-answers" class="screen">
+      <div class="card slanted" style="max-width:850px; margin:20px auto;">
+        <h2 id="bank-title" style="margin-top:0"></h2>
+        <div class="answers-section">
+          <div class="answers-controls">
+            <button class="btn ghost small" id="expand-all"></button>
+            <button class="btn ghost small" id="collapse-all"></button>
+          </div>
+          <div id="answers-list"></div>
+        </div>
+        <div class="divider"></div>
+        <div class="center"><button class="btn" id="bank-back">رجوع</button></div>
+      </div>
+    </section>
+
+    <!-- SETUP -->
+    <section id="setup" class="screen">
+      <!-- Top: two columns — Bank (left) and Game settings (right) -->
+      <div class="setup-layout">
+        <div class="card" id="bank-card">
+          <h2 id="bank-manage-title" style="margin-top:0">إدارة بنك الأسئلة (اختياري)</h2>
+          <p class="muted" id="bank-desc">أنشئ جولة بعنوان وعشر إجابات. تُحفظ محليًا على هذا الجهاز.</p>
+          <label id="custom-title-label">عنوان الجولة</label>
+          <input id="custom-title" type="text" placeholder="عنوان الجولة" />
+          <div id="builder"></div>
+          <div class="row" style="margin-top:10px">
+            <button class="btn" id="add-answer">+ إضافة حقل إجابة</button>
+            <button class="btn" id="save-round">حفظ الجولة</button>
+            <button class="btn" id="export-bank">تصدير البنك (JSON)</button>
+            <label class="btn" for="import-bank" style="cursor:pointer" id="import-bank-label">استيراد بنك</label>
+            <input id="import-bank" type="file" accept="application/json" style="display:none"/>
+            <button class="btn" id="reset-app" title="إعادة ضبط التطبيق">إعادة ضبط التطبيق</button>
+          </div>
+        </div>
+
+        <div class="card" id="game-card">
+          <h2 id="setup-title" style="margin-top:0">إعداد اللعبة</h2>
+          <div id="categories-root" class="categories-root">
+            <label id="categories-label">اختر فئة (اختياري)</label>
+            <div id="categories-grid" class="categories-grid" aria-live="polite"></div>
+          </div>
+          <div class="grid col-3">
+            <div>
+              <label id="round-count-label">عدد الجولات</label>
+              <select id="round-count">
+                <option>1</option><option>2</option><option>3</option>
+                <option>4</option><option>5</option><option selected>6</option>
+              </select>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div class="round-title" id="rounds-select-title">اختيار الأسئلة من بنك الأسئلة</div>
+          <div id="rounds-container" class="rounds-box"></div>
+          <div style="margin-top:14px"><button class="btn primary" id="setup-start">بدء اللعب</button></div>
+        </div>
+      </div>
+
+      <!-- Bottom: team settings row (two cards) -->
+      <div class="teams-row">
+        <div class="team-card card">
+          <div class="team-card-media" aria-hidden="true">
+            <div class="team-avatar" id="team1-avatar">1</div>
+          </div>
+          <div class="team-card-body">
+            <label id="team1-name-label">اسم الفريق ١</label>
+            <input id="team1-name" type="text" value="الفريق ١" />
+            <div class="color-row" style="margin-top:8px">
+              <label id="team1-color-label">لون الفريق ١</label>
+              <div id="team1-colors" class="color-options">
+                <div class="color-option" data-color="#ffffff"><div class="color-circle" style="background:#ffffff"></div><span>ابيض</span></div>
+                <div class="color-option" data-color="#ff0000"><div class="color-circle" style="background:#ff0000"></div><span>احمر</span></div>
+                <div class="color-option" data-color="#800080"><div class="color-circle" style="background:#800080"></div><span>بنفسجي</span></div>
+                <div class="color-option" data-color="#008000"><div class="color-circle" style="background:#008000"></div><span>اخضر</span></div>
+                <div class="color-option" data-color="#ff69b4"><div class="color-circle" style="background:#ff69b4"></div><span>وردي</span></div>
+              </div>
+              <input id="team1-color" type="hidden" value="#ffffff" />
+            </div>
+          </div>
+        </div>
+
+        <div class="team-card card">
+          <div class="team-card-media" aria-hidden="true">
+            <div class="team-avatar" id="team2-avatar">2</div>
+          </div>
+          <div class="team-card-body">
+            <label id="team2-name-label">اسم الفريق ٢</label>
+            <input id="team2-name" type="text" value="الفريق ٢" />
+            <div class="color-row" style="margin-top:8px">
+              <label id="team2-color-label">لون الفريق ٢</label>
+              <div id="team2-colors" class="color-options">
+                <div class="color-option" data-color="#ffffff"><div class="color-circle" style="background:#ffffff"></div><span>ابيض</span></div>
+                <div class="color-option" data-color="#ff0000"><div class="color-circle" style="background:#ff0000"></div><span>احمر</span></div>
+                <div class="color-option" data-color="#800080"><div class="color-circle" style="background:#800080"></div><span>بنفسجي</span></div>
+                <div class="color-option" data-color="#008000"><div class="color-circle" style="background:#008000"></div><span>اخضر</span></div>
+                <div class="color-option" data-color="#ff69b4"><div class="color-circle" style="background:#ff69b4"></div><span>وردي</span></div>
+              </div>
+              <input id="team2-color" type="hidden" value="#800080" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GAME -->
+    <section id="game" class="screen">
+      <div class="board-container">
+        <div class="game-title" id="round-title">—</div>
+        <div class="board">
+          <div class="col" id="col-left"></div>
+          <div class="col" id="col-right"></div>
+        </div>
+      </div>
+      <div class="control-panel">
+          <div class="control-panel-title">لوحة التحكم</div>
+          
+          <div class="team-scores">
+            <div class="team-score">
+              <div class="team-name">
+                <div id="team1-indicator" class="team-indicator" style="background: var(--team1-color)">T1</div>
+                <span id="team1-name-display">الفريق ١</span>
+              </div>
+              <div class="score" id="team1-score">0</div>
+            </div>
+            <div class="team-score">
+              <div class="team-name">
+                <div id="team2-indicator" class="team-indicator" style="background: var(--team2-color)">T2</div>
+                <span id="team2-name-display">الفريق ٢</span>
+              </div>
+              <div class="score" id="team2-score">0</div>
+            </div>
+          </div>
+          
+          <div class="game-info">
+            <div class="round-display">الجولة <span id="current-round">1</span>/<span id="total-rounds">3</span></div>
+          </div>
+
+          <div class="controls-grid">
+            <button class="control-btn wrong" id="wrong-btn">خطأ / تمرير</button>
+            <button class="control-btn switch" id="switch-btn">تبديل الدور</button>
+            <button class="control-btn undo" id="undo-btn">تراجع</button>
+            <button class="control-btn reveal" id="reveal-btn">إظهار المتبقي</button>
+          <button class="btn" id="end-round">إنهاء الجولة</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTER -->
+    <section id="inter" class="screen">
+      <div class="card">
+        <h2 id="inter-title" style="margin-top:0">ملخص الجولة <span id="inter-which"></span></h2>
+        <div id="inter-list"></div>
+        <div class="center" style="margin-top:12px"><button class="btn primary" id="next-round">الجولة التالية</button></div>
+      </div>
+    </section>
+
+    <!-- FINAL -->
+    <section id="final" class="screen">
+      <div class="card">
+        <h2 id="final-title" style="margin-top:0">النتيجة النهائية</h2>
+        <div id="final-body"></div>
+        <div class="center" style="margin-top:12px"><button class="btn primary" id="restart">بدء من جديد</button></div>
+      </div>
+    </section>
+  </main>
+
+<script>
+/* =====================
+   i18n
+   ===================== */
+const T = {
+  ar: {
+    brand: "لعبة التوب 10",
+    homeTitle: "مرحبًا بك في لعبة التوب 10",
+    homeSub: "اختر أحد الخيارين أدناه للبدء",
+    start: "بدء اللعب",
+    how: "كيفية اللعب",
+    howTitle: "كيفية اللعب",
+    howText: "تتكون اللعبة من فريقين. لديك لوحة تضم أفضل 10 إجابات لسؤال الجولة. اضغط على البلاط لكشف الإجابة وإضافة نقاطها للفريق الحالي (الترتيب = النقاط: #1 = 1 … #10 = 10). بعد كشف إجابة صحيحة، ينتقل الدور تلقائيًا إلى الفريق التالي. عند الخطأ/التمرير، ينتقل الدور أيضًا. بعد نهاية الجولة تظهر لوحة ملخص ثم تنتقل للجولة التالية.",
+    back: "رجوع",
+    setupTitle: "إعداد اللعبة",
+    roundCount: "عدد الجولات",
+    roundsSelectTitle: "اختيار الأسئلة من بنك الأسئلة",
+    t1Name: "اسم الفريق ١",
+    t1Color: "لون الفريق ١",
+    t2Name: "اسم الفريق ٢",
+    t2Color: "لون الفريق ٢",
+    startGame: "بدء اللعب",
+    bankManageTitle: "إدارة بنك الأسئلة (اختياري)",
+    bankAnswers: "أجوبة بنكية",
+    bankButton: "أجوبة بنكية",
+    expandAll: "فتح الكل",
+    collapseAll: "طيّ الكل",
+    bankDesc: "أنشئ جولة بعنوان وعشر إجابات. تُحفظ محليًا على هذا الجهاز.",
+    customTitleLabel: "عنوان الجولة",
+    exportBank: "تصدير البنك (JSON)",
+    importBank: "استيراد بنك",
+  homeNav: "الرئيسية",
+  resetApp: "إعادة ضبط التطبيق",
+  resetConfirm: "هل أنت متأكد؟ سيتم مسح كل بيانات التطبيق (بنك الجولات والحالة).",
+    wrong: "خطأ / تمرير",
+    switch: "تبديل الدور",
+    undo: "تراجع",
+    reveal: "إظهار المتبقي (بدون نقاط)",
+    endRound: "إنهاء الجولة",
+    interTitle: "ملخص الجولة",
+    nextRound: "الجولة التالية",
+    finalTitle: "النتيجة النهائية",
+    restart: "بدء من جديد",
+    roundWord: "الجولة",
+  },
+  en: {
+    brand: "Top 10 game",
+    homeTitle: "Welcome to Top 10 game",
+    homeSub: "Pick an option below to begin",
+    start: "Start Game",
+    how: "How to Play",
+    howTitle: "How to Play",
+    howText: "Two teams compete. Each round has a board of the Top 10 answers. Click a tile to reveal and add its points to the current team (rank = points: #1 = 1 … #10 = 10). After a correct reveal, turn passes to the next team. Wrong/Pass also switches turn. When the round ends, a summary appears before moving to the next round.",
+    back: "Back",
+    setupTitle: "Game Setup",
+    roundCount: "Number of Rounds",
+    roundsSelectTitle: "Choose questions from the bank",
+    bankAnswers: "Bank Answers",
+    bankButton: "Bank Answers",
+    expandAll: "Expand all",
+    collapseAll: "Collapse all",
+    t1Name: "Team 1 name",
+    t1Color: "Team 1 color",
+    t2Name: "Team 2 name",
+    t2Color: "Team 2 color",
+    startGame: "Start Game",
+    bankManageTitle: "Question bank (optional)",
+    bankDesc: "Create a round with a title and 10 answers. Saved locally on this device.",
+    customTitleLabel: "Round title",
+    exportBank: "Export bank (JSON)",
+    importBank: "Import bank",
+  homeNav: "Home",
+  resetApp: "Reset app",
+  resetConfirm: "Are you sure? This will clear all app data (bank & saved state).",
+    wrong: "Wrong / Pass",
+    switch: "Switch Turn",
+    undo: "Undo",
+    reveal: "Reveal Remaining (no points)",
+    endRound: "End Round",
+    interTitle: "Round Summary",
+    nextRound: "Next Round",
+    finalTitle: "Final Score",
+    restart: "Restart",
+    roundWord: "Round",
+  }
+};
+// Color name translations for the color pickers (hex -> {ar,en})
+const COLOR_LABELS = {
+  "#ffffff": { ar: "ابيض", en: "White" },
+  "#ff0000": { ar: "احمر", en: "Red" },
+  "#800080": { ar: "بنفسجي", en: "Purple" },
+  "#008000": { ar: "اخضر", en: "Green" },
+  "#ff69b4": { ar: "وردي", en: "Pink" }
+};
+let LANG = localStorage.getItem("top10_lang") || "ar";
+function applyLang(){
+  document.documentElement.lang = LANG;
+  document.documentElement.dir = (LANG==="ar") ? "rtl" : "ltr";
+  const tr = (k)=> T[LANG][k];
+  document.getElementById("brand-title").textContent = tr("brand");
+  document.getElementById("home-title").textContent = tr("homeTitle");
+  document.getElementById("home-sub").textContent = tr("homeSub");
+  document.getElementById("home-start").textContent = tr("start");
+  document.getElementById("home-how").textContent = tr("how");
+  document.getElementById("home-bank").textContent = tr("bankButton");
+  document.getElementById("howto-title").textContent = tr("howTitle");
+  document.getElementById("howto-text").textContent = tr("howText");
+  document.getElementById("howto-back").textContent = tr("back");
+  document.getElementById("bank-title").textContent = tr("bankAnswers");
+  document.getElementById("expand-all").textContent = tr("expandAll");
+  document.getElementById("collapse-all").textContent = tr("collapseAll");
+  // Accessibility labels
+  document.getElementById("expand-all").setAttribute('aria-label', tr("expandAll"));
+  document.getElementById("collapse-all").setAttribute('aria-label', tr("collapseAll"));
+  document.getElementById("expand-all").title = tr("expandAll");
+  document.getElementById("collapse-all").title = tr("collapseAll");
+  document.getElementById("bank-back").textContent = tr("back");
+  document.getElementById("bank-back").setAttribute('aria-label', tr('back'));
+  document.getElementById("home-bank").setAttribute('aria-label', tr('bankButton'));
+  renderAnswersCatalog(); // Re-render answers catalog with new language
+  document.getElementById("setup-title").textContent = tr("setupTitle");
+  document.getElementById("round-count-label").textContent = tr("roundCount");
+  document.getElementById("rounds-select-title").textContent = tr("roundsSelectTitle");
+  document.getElementById("team1-name-label").textContent = tr("t1Name");
+  document.getElementById("team1-color-label").textContent = tr("t1Color");
+  document.getElementById("team2-name-label").textContent = tr("t2Name");
+  document.getElementById("team2-color-label").textContent = tr("t2Color");
+  document.getElementById("setup-start").textContent = tr("startGame");
+  document.getElementById("bank-manage-title").textContent = tr("bankManageTitle");
+  document.getElementById("bank-desc").textContent = tr("bankDesc");
+  document.getElementById("custom-title-label").textContent = tr("customTitleLabel");
+  document.getElementById("export-bank").textContent = tr("exportBank");
+  document.getElementById("import-bank-label").textContent = T[LANG]["importBank"];
+  const resetBtn = document.getElementById('reset-app');
+  if(resetBtn) {
+    resetBtn.textContent = tr('resetApp');
+    resetBtn.title = tr('resetApp');
+  }
+  document.getElementById("wrong-btn").textContent = tr("wrong");
+  document.getElementById("switch-btn").textContent = tr("switch");
+  document.getElementById("undo-btn").textContent = tr("undo");
+  document.getElementById("reveal-btn").textContent = tr("reveal");
+  document.getElementById("end-round").textContent = tr("endRound");
+  document.getElementById("inter-title").firstChild.nodeValue = tr("interTitle")+" ";
+  document.getElementById("next-round").textContent = tr("nextRound");
+  document.getElementById("final-title").textContent = tr("finalTitle");
+  document.getElementById("restart").textContent = tr("restart");
+  // language buttons
+  document.getElementById("btn-ar").classList.toggle("active", LANG==="ar");
+  document.getElementById("btn-en").classList.toggle("active", LANG==="en");
+  // update color option labels to match selected language
+  try{
+    document.querySelectorAll('.color-option').forEach(opt=>{
+      const sp = opt.querySelector('span');
+      if(!sp) return;
+      const hex = (opt.dataset.color || '').toLowerCase();
+      const lbl = (COLOR_LABELS[hex] && COLOR_LABELS[hex][LANG]) ? COLOR_LABELS[hex][LANG] : sp.textContent;
+      sp.textContent = lbl;
+      // keep aria-label in sync for accessibility
+      opt.setAttribute('aria-label', lbl + ' ' + (LANG === 'ar' ? 'لون' : 'color'));
+    });
+  }catch(e){ /* ignore if DOM not ready */ }
+  // update the small home-bar label if present
+  try{
+    const hb = document.querySelector('#home-bar .home-label');
+    if(hb) hb.textContent = tr('homeNav');
+    const hbLink = document.getElementById('home-bar');
+    if(hbLink) hbLink.setAttribute('aria-label', tr('homeNav'));
+  }catch(e){}
+  updateScoreboard();
+}
+function setLang(l){ LANG = l; localStorage.setItem("top10_lang", l); applyLang(); }
+document.getElementById("btn-ar").addEventListener("click", ()=> setLang("ar"));
+document.getElementById("btn-en").addEventListener("click", ()=> setLang("en"));
+
+/* =====================
+   Bank + State
+   ===================== */
+const STORAGE_BANK_KEY = "top10_bank_v4";
+const STORAGE_STATE_KEY = "top10_state_v4";
+
+// defaultBank فارغ افتراضياً (لا توجد جولات مثبّتة)
+const defaultBank = [];
+// If the user provided a bundled default bank file (default_bank.json) we'll load it here
+let DEFAULT_FILE_BANK = null;
+
+// Fallback: if fetch failed (e.g., file://), attempt to parse embedded JSON script with id="default-bank-data"
+async function loadDefaultBankFile(){
+  try{
+    const res = await fetch('default_bank.json');
+    if(res && res.ok){
+      const data = await res.json();
+      if(Array.isArray(data)) { DEFAULT_FILE_BANK = data; return; }
+    }
+  }catch(err){ /* fetch failed — continue to fallback */ }
+  try{
+    const el = document.getElementById('default-bank-data');
+    if(el){
+      const parsed = JSON.parse(el.textContent || el.innerText || '[]');
+      if(Array.isArray(parsed)) DEFAULT_FILE_BANK = parsed;
+    }
+  }catch(err){ console.warn('Could not parse embedded default bank JSON', err); }
+}
+
+function loadBank(){ try{const s=localStorage.getItem(STORAGE_BANK_KEY); if(s) return JSON.parse(s);}catch(e){} return defaultBank; }
+function saveBank(bank){ localStorage.setItem(STORAGE_BANK_KEY, JSON.stringify(bank)); }
+let BANK = loadBank();
+
+/* Answers Catalog */
+function renderAnswersCatalog() {
+  const list = document.getElementById('answers-list');
+  list.innerHTML = '';
+  
+  if (!BANK || !BANK.length) {
+    const empty = document.createElement('p');
+    empty.textContent = LANG === 'ar' ? 'لا توجد جولات في البنك حاليًا' : 'No rounds in the bank currently';
+    empty.style.textAlign = 'center';
+    empty.style.color = '#666';
+    list.appendChild(empty);
+    return;
+  }
+  
+  BANK.forEach((round, index) => {
+    const item = document.createElement('div');
+    item.className = 'round-item';
+    
+  const header = document.createElement('div');
+  header.className = 'round-header';
+  header.textContent = round.title || (LANG === 'ar' ? `جولة ${index + 1}` : `Round ${index + 1}`);
+  // Accessibility: make header act like a button
+  header.setAttribute('role', 'button');
+  header.tabIndex = 0;
+    
+  const content = document.createElement('div');
+  content.className = 'round-content';
+  // ensure unique id for aria-controls
+  content.id = `answers-${index}`;
+  header.setAttribute('aria-controls', content.id);
+  header.setAttribute('aria-expanded', 'false');
+    
+    const answersList = document.createElement('ol');
+    answersList.className = 'answer-list';
+    
+    round.answers.forEach((answer, i) => {
+      if (answer && answer.text) {
+        const li = document.createElement('li');
+        li.textContent = answer.text;
+        answersList.appendChild(li);
+      }
+    });
+    
+    content.appendChild(answersList);
+    item.appendChild(header);
+    item.appendChild(content);
+    list.appendChild(item);
+    
+    const toggleItem = ()=>{
+      const expanded = item.classList.toggle('expanded');
+      header.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    };
+
+    header.addEventListener('click', toggleItem);
+    header.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar'){
+        e.preventDefault();
+        toggleItem();
+      }
+    });
+  });
+}
+
+// Expand/Collapse functionality
+document.getElementById('expand-all').addEventListener('click', () => {
+  document.querySelectorAll('.round-item').forEach(item => {
+    item.classList.add('expanded');
+  });
+});
+
+document.getElementById('collapse-all').addEventListener('click', () => {
+  document.querySelectorAll('.round-item').forEach(item => {
+    item.classList.remove('expanded');
+  });
+});
+
+const state = {
+  totalRounds: 3,
+  teams: [{ name:"الفريق ١", color:"#b3e5fc", score:0 }, { name:"الفريق ٢", color:"#ffcdd2", score:0 }],
+  currentTeam: 0,
+  roundOrder: [],
+  currentRoundIdx: 0,
+  round: null,
+  history: []
+};
+
+// Setup color selection handlers
+function setupColorSelectors() {
+  const team1Colors = $("#team1-colors");
+  const team2Colors = $("#team2-colors");
+  const team1ColorInput = $("#team1-color");
+  const team2ColorInput = $("#team2-color");
+
+  // helper: set avatar preview (gradient + text contrast)
+  function setAvatarPreview(avatarEl, colorHex){
+    if(!avatarEl) return;
+    // create a subtle gradient using the chosen color
+    const gradient = `linear-gradient(135deg, ${colorHex}, rgba(0,0,0,0.25))`;
+    avatarEl.style.background = gradient;
+    // compute luminance to pick text color
+    const hex = colorHex.replace('#','');
+    let r = parseInt(hex.substring(0,2),16)/255;
+    let g = parseInt(hex.substring(2,4),16)/255;
+    let b = parseInt(hex.substring(4,6),16)/255;
+    // relative luminance
+    const lum = 0.2126*r + 0.7152*g + 0.0722*b;
+    avatarEl.style.color = (lum > 0.75) ? '#000' : '#fff';
+    avatarEl.style.borderColor = (lum > 0.75) ? 'rgba(0,0,0,0.12)' : 'rgba(255,255,255,0.08)';
+  }
+
+  function handleColorClick(colorOptions, input, teamIdx, avatarId){
+    const options = colorOptions.querySelectorAll('.color-option');
+    const avatarEl = document.getElementById(avatarId);
+    options.forEach(opt => {
+      opt.addEventListener('click', () => {
+        options.forEach(o => o.classList.remove('selected'));
+        opt.classList.add('selected');
+        const color = opt.dataset.color;
+        input.value = color;
+        state.teams[teamIdx].color = color;
+        // update avatar preview
+        setAvatarPreview(avatarEl, color);
+        updateScoreboard();
+      });
+      // Select initial color and preview
+      if(opt.dataset.color === input.value) {
+        opt.classList.add('selected');
+        setAvatarPreview(avatarEl, opt.dataset.color);
+      }
+    });
+  }
+
+  handleColorClick(team1Colors, team1ColorInput, 0, 'team1-avatar');
+  handleColorClick(team2Colors, team2ColorInput, 1, 'team2-avatar');
+}
+
+function saveState(){ localStorage.setItem(STORAGE_STATE_KEY, JSON.stringify(state)); }
+function tryRestore(){ try{const raw=localStorage.getItem(STORAGE_STATE_KEY); if(!raw) return false; Object.assign(state, JSON.parse(raw)); return true;}catch(e){return false;} }
+function computePoints(rank){ return rank; } // 1..10
+
+/* =====================
+   DOM refs
+   ===================== */
+const $ = (s)=>document.querySelector(s);
+const home=$("#home"), howto=$("#howto"), bankAnswers=$("#bank-answers"), setup=$("#setup"), game=$("#game"), inter=$("#inter"), finalS=$("#final");
+const homeStart=$("#home-start"), homeHow=$("#home-how"), howBack=$("#howto-back");
+const roundCount=$("#round-count"), roundsContainer=$("#rounds-container");
+const team1Name=$("#team1-name"), team2Name=$("#team2-name");
+const team1Color=$("#team1-color"), team2Color=$("#team2-color");
+const setupStart=$("#setup-start");
+// Scoreboard elements are created dynamically when the game starts
+// Control panel elements
+let currentTeamIndicator = null;
+
+function createScoreboard(){
+  // Scoreboard was removed in favor of the control panel on the right.
+  // Keep this function as a safe no-op so older calls (restore flow) don't throw.
+  return;
+}
+const roundTitle=$("#round-title");
+const colLeft=$("#col-left"), colRight=$("#col-right");
+const wrongBtn=$("#wrong-btn"), switchBtn=$("#switch-btn"), undoBtn=$("#undo-btn"), revealBtn=$("#reveal-btn"), endRoundBtn=$("#end-round");
+const interWhich=$("#inter-which"), interList=$("#inter-list"), nextRoundBtn=$("#next-round");
+const finalBody=$("#final-body"), restartBtn=$("#restart");
+
+/* =====================
+   Helpers
+   ===================== */
+function show(id){ [home, howto, bankAnswers, setup, game, inter, finalS].forEach(s=>s.classList.remove("active")); $(id).classList.add("active"); }
+function updateScoreboard(){
+  try {
+    // Update team names and scores
+    $("#team1-name-display").textContent = state.teams[0].name;
+    $("#team2-name-display").textContent = state.teams[1].name;
+    $("#team1-score").textContent = state.teams[0].score;
+    $("#team2-score").textContent = state.teams[1].score;
+
+    // Update team indicators (colors)
+    const t1ind = $("#team1-indicator");
+    const t2ind = $("#team2-indicator");
+    if(t1ind) t1ind.style.background = state.teams[0].color || '';
+    if(t2ind) t2ind.style.background = state.teams[1].color || '';
+
+    // Update current team indicator
+    const team1Score = document.querySelector('.team-score:first-child');
+    const team2Score = document.querySelector('.team-score:last-child');
+    if(team1Score) team1Score.classList.toggle("current", state.currentTeam === 0);
+    if(team2Score) team2Score.classList.toggle("current", state.currentTeam === 1);
+
+    // Update round information
+    if(state.round) {
+      $("#round-title").textContent = state.round.title;
+      $("#current-round").textContent = (state.currentRoundIdx + 1);
+      $("#total-rounds").textContent = state.totalRounds;
+    }
+  } catch(e) {
+    console.error("Error updating scoreboard:", e);
+  }
+}
+function buildAnswerRow(i, value=""){
+  const wrap=document.createElement("div"); wrap.className="grid col-2 card"; wrap.style.marginTop="10px";
+  const d1=document.createElement("div");
+  const l1=document.createElement("label"); l1.textContent=`${i+1}. `+(LANG==="ar"?"الإجابة":"Answer");
+  const in1=document.createElement("input"); in1.type="text"; in1.placeholder=(LANG==="ar"?"نص الإجابة":"Answer text"); in1.value=value; in1.dataset.role="answer";
+  d1.appendChild(l1); d1.appendChild(in1);
+  wrap.appendChild(d1);
+  return wrap;
+}
+const builder=$("#builder");
+function resetBuilder(n=10){ builder.innerHTML=""; for(let i=0;i<n;i++) builder.appendChild(buildAnswerRow(i)); }
+resetBuilder();
+
+/* =====================
+   Round selectors
+   ===================== */
+function renderRoundSelectors(){
+  roundsContainer.innerHTML = "";
+  const count = Number(roundCount.value||3);
+  for(let i=0;i<count;i++){
+    const wrap=document.createElement("div");
+    const lab=document.createElement("label"); lab.textContent=(LANG==="ar"?`الجولة ${i+1}`:`Round ${i+1}`);
+    const sel=document.createElement("select"); sel.className="round-select";
+    BANK.forEach(r=>{ const opt=document.createElement("option"); opt.value=r.id; opt.textContent=r.title; sel.appendChild(opt); });
+    sel.value = BANK[i % BANK.length]?.id || "";
+    wrap.appendChild(lab); wrap.appendChild(sel);
+    roundsContainer.appendChild(wrap);
+  }
+}
+roundCount.addEventListener("change", renderRoundSelectors);
+
+/* =====================
+   Categories picker
+   ===================== */
+let CATEGORIES = [];
+function onCategoryClick(card, cat){
+  // single-select behavior
+  document.querySelectorAll('#categories-grid .category-card').forEach(c=> c.classList.remove('selected'));
+  card.classList.add('selected');
+  // pulse animation
+  card.classList.remove('pulse');
+  // force reflow to restart animation
+  void card.offsetWidth;
+  card.classList.add('pulse');
+  // keep selected id in state
+  state.selectedCategory = cat.id;
+  saveState();
+}
+
+function renderCategories(list){
+  const root = document.getElementById('categories-grid');
+  root.innerHTML = '';
+  if(!Array.isArray(list) || !list.length){
+    root.innerHTML = '<div class="muted">'+(LANG==='ar'?'لا توجد فئات':'No categories')+'</div>';
+    return;
+  }
+  // show categories (limit layout to first 60 for performance)
+  const show = list.slice(0, 200);
+  show.forEach(cat=>{
+    const el = document.createElement('div');
+    el.className = 'category-card';
+    el.tabIndex = 0;
+    el.setAttribute('role','button');
+    el.setAttribute('aria-pressed','false');
+    el.dataset.id = cat.id;
+    el.innerHTML = `<div class="emoji">${cat.emoji||''}</div><div class="name">${cat.name}</div>`;
+    el.addEventListener('click', ()=>{ onCategoryClick(el, cat); el.setAttribute('aria-pressed','true'); });
+    el.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); el.click(); } });
+    // restore selection if matches state
+    if(state.selectedCategory && state.selectedCategory === cat.id){ el.classList.add('selected'); }
+    root.appendChild(el);
+  });
+}
+
+async function loadCategories(){
+  try{
+    const res = await fetch('categories_100.json');
+    if(!res.ok) throw new Error('fetch failed');
+    CATEGORIES = await res.json();
+    renderCategories(CATEGORIES);
+  }catch(err){
+    console.warn('Could not load categories.json', err);
+    // fallback: show a small message
+    const root = document.getElementById('categories-grid');
+    if(root) root.innerHTML = '<div class="muted">'+(LANG==='ar'?'تعذر تحميل الفئات':'Unable to load categories')+'</div>';
+  }
+}
+
+/* =====================
+   Bank management
+   ===================== */
+document.getElementById("add-answer").addEventListener("click", ()=>{
+  const n = builder.querySelectorAll("[data-role='answer']").length;
+  builder.appendChild(buildAnswerRow(n));
+});
+document.getElementById("save-round").addEventListener("click", ()=>{
+  const title=document.getElementById("custom-title").value.trim(); if(!title){ alert(LANG==="ar"?"أدخل عنوان الجولة":"Enter a round title"); return; }
+  const rows = Array.from(builder.querySelectorAll(".grid.col-2.card")).slice(0,10);
+  if(rows.length<10){ alert(LANG==="ar"?"أدخل 10 إجابات على الأقل":"Please provide at least 10 answers"); return; }
+  const answers = rows.map(r=>{
+    const ansInput = r.querySelector("[data-role='answer']");
+    const a = ansInput ? ansInput.value.trim() : "";
+    return { text: a, aliases: [] };
+  });
+  if(answers.some(x=>!x.text)){ alert(LANG==="ar"?"تأكد من تعبئة كل الإجابات":"Please fill all answers"); return; }
+  const id = "r-" + title.replace(/\s+/g,"-").toLowerCase().slice(0,48) + "-" + Math.random().toString(36).slice(2,6);
+  BANK.push({id,title,answers}); saveBank(BANK); renderRoundSelectors(); renderAnswersCatalog(); alert(LANG==="ar"?"تم الحفظ":"Saved");
+});
+document.getElementById("export-bank").addEventListener("click", ()=>{
+  const blob=new Blob([JSON.stringify(BANK,null,2)], {type:"application/json"});
+  const url=URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download="top10_bank.json"; a.click(); URL.revokeObjectURL(url);
+});
+document.getElementById("import-bank").addEventListener("change", (e)=>{
+  const file=e.target.files?.[0]; if(!file) return;
+  const fr=new FileReader(); fr.onload=()=>{
+    try{ const data=JSON.parse(fr.result);
+      if(!Array.isArray(data)) throw new Error();
+      data.forEach(r=>{ if(!r.title||!Array.isArray(r.answers)||r.answers.length<10) throw new Error(); });
+      BANK=data; saveBank(BANK); renderRoundSelectors(); renderAnswersCatalog(); alert(LANG==="ar"?"تم الاستيراد":"Imported");
+    }catch(err){ alert(LANG==="ar"?"ملف غير صالح":"Invalid file"); }
+  }; fr.readAsText(file);
+});
+
+// Reset / clear local storage handler
+document.getElementById('reset-app').addEventListener('click', ()=>{
+  const ok = confirm(T[LANG]['resetConfirm']);
+  if(!ok) return;
+  // Clear storage keys used by the app
+  try{
+    localStorage.removeItem(STORAGE_BANK_KEY);
+    localStorage.removeItem(STORAGE_STATE_KEY);
+    // optionally keep language, but clear it to default if you want
+    // localStorage.removeItem('top10_lang');
+  }catch(e){ console.warn('clear storage error', e); }
+  // reset in-memory BANK to default file if present, otherwise to built-in default
+  if(DEFAULT_FILE_BANK && Array.isArray(DEFAULT_FILE_BANK) && DEFAULT_FILE_BANK.length){
+    BANK = DEFAULT_FILE_BANK.slice();
+  }else{
+    BANK = defaultBank.slice();
+  }
+  saveBank(BANK);
+  // reload the page to ensure a clean state
+  location.reload();
+});
+
+/* =====================
+   Navigation
+   ===================== */
+document.getElementById("home-how").addEventListener("click", ()=> show("#howto"));
+document.getElementById("howto-back").addEventListener("click", ()=> show("#home"));
+document.getElementById("bank-back").addEventListener("click", ()=> show("#home"));
+document.getElementById("home-bank").addEventListener("click", ()=> {
+  // Open the dedicated bank answers page in a new tab
+  try{ window.open('bank.html', '_blank'); }catch(e){ show("#bank-answers"); }
+});
+document.getElementById("home-start").addEventListener("click", ()=>{
+  renderRoundSelectors();
+  show("#setup");
+});
+document.getElementById("setup-start").addEventListener("click", ()=>{
+  state.teams[0].name = team1Name.value.trim() || (LANG==="ar"?"الفريق ١":"Team 1");
+  state.teams[1].name = team2Name.value.trim() || (LANG==="ar"?"الفريق ٢":"Team 2");
+  state.teams[0].color = team1Color.value || "#b3e5fc";
+  state.teams[1].color = team2Color.value || "#ffcdd2";
+  state.teams[0].score = 0; state.teams[1].score = 0;
+  state.currentTeam = 0;
+  const selected = Array.from(document.querySelectorAll(".round-select")).map(s=>s.value);
+  state.roundOrder = selected; state.totalRounds = selected.length; state.currentRoundIdx = 0;
+  // Hide setup and start the game
+  show("#game");
+  startRound();
+  // Initial update of the control panel
+  updateScoreboard();
+});
+
+/* =====================
+   Gameplay (click-to-reveal) — turn always switches (correct or wrong)
+   ===================== */
+function pickRoundById(id){ const r = BANK.find(x=>x.id===id) || BANK[0]; return JSON.parse(JSON.stringify(r)); }
+function startRound(){
+  const r = pickRoundById(state.roundOrder[state.currentRoundIdx]);
+  state.round = { id:r.id, title:r.title, answers:r.answers.slice(0,10), found:new Array(10).fill(false), foundBy:new Array(10).fill(null) };
+  state.history = [];
+  // Start the game with the new round
+  show("#game"); 
+  updateScoreboard(); 
+  renderBoard(); 
+  saveState();
+}
+function renderBoard(){
+  colLeft.innerHTML=""; colRight.innerHTML="";
+  state.round.answers.forEach((ans, i)=>{
+    const rank=i+1;
+    const tile=document.createElement("div"); tile.className="tile"+(state.round.found[i]?" found":""); tile.dataset.idx=i;
+    const rankEl=document.createElement("div"); rankEl.className="rank"; rankEl.textContent="#"+rank;
+    const content=document.createElement("div");
+    if(state.round.found[i]){ 
+      const pts=computePoints(rank); 
+      content.innerHTML=`<div>${ans.text}</div><span class="points">+${pts}</span>`; 
+      tile.title=ans.text;
+      // Color the tile with the team color that found it
+      const teamIdx = state.round.foundBy[i];
+      if(teamIdx !== null && teamIdx !== undefined) {
+        const teamColor = state.teams[teamIdx].color;
+        tile.style.background = teamColor;
+        // adjust text color for contrast based on team color luminance
+        const hex = (teamColor || '#ffffff').replace('#','');
+        let r = parseInt(hex.substring(0,2),16)/255;
+        let g = parseInt(hex.substring(2,4),16)/255;
+        let b = parseInt(hex.substring(4,6),16)/255;
+        const lum = 0.2126*r + 0.7152*g + 0.0722*b;
+        tile.style.color = (lum > 0.5) ? '#000' : '#fff';
+      }
+    }
+    else{ content.textContent="—"; tile.title=(LANG==="ar"?"انقر للكشف":"Click to reveal"); tile.addEventListener("click", ()=> revealByClick(i)); }
+    tile.appendChild(rankEl); tile.appendChild(content);
+    (i<5 ? colLeft : colRight).appendChild(tile);
+  });
+}
+function nextTeam(){ state.currentTeam = 1 - state.currentTeam; }
+function registerAttempt(correct, matchIndex=null){
+  const step = { type:"attempt", correct, matchIndex, teamBefore: state.currentTeam, points:0 };
+  if(correct && matchIndex!=null){
+    const pts = computePoints(matchIndex+1);
+    step.points = pts;
+    state.round.found[matchIndex]=true;
+    state.round.foundBy[matchIndex]=state.currentTeam; // track which team found this answer
+    state.teams[state.currentTeam].score += pts;
+  }
+  // Always switch turn after any action (per request)
+  nextTeam();
+  state.history.push(step);
+  updateScoreboard(); renderBoard(); saveState();
+  if(state.round.found.every(Boolean)){ endRound(); }
+}
+function revealByClick(i){
+  if(state.round.found[i]) return;
+  registerAttempt(true, i);
+}
+function undoLast(){
+  const a = state.history.pop(); if(!a) return;
+  // revert turn
+  state.currentTeam = a.teamBefore;
+  // revert state
+  if(a.correct && a.matchIndex!=null){
+    state.round.found[a.matchIndex]=false;
+    state.round.foundBy[a.matchIndex]=null; // clear the team that found it
+    state.teams[a.teamBefore].score = Math.max(0, state.teams[a.teamBefore].score - a.points);
+  }
+  updateScoreboard(); renderBoard(); saveState();
+}
+function endRound(){
+  const idx=state.currentRoundIdx;
+  const list = state.round.answers.map((a,i)=>{
+    const found=state.round.found[i]; const pts=computePoints(i+1);
+    return `<li>${found?"✅":"❌"} #${i+1} — <b>${a.text}</b> <span class="muted">(${pts})</span></li>`;
+  }).join("");
+  interWhich.textContent = `${idx+1} / ${state.totalRounds}`;
+  interList.innerHTML = `<ol class="summary-list">${list}</ol>`;
+  if(idx < state.totalRounds-1){ show("#inter"); }
+  else{
+    const t0=state.teams[0], t1=state.teams[1];
+    const winner = t0.score===t1.score ? (LANG==="ar"?"تعادل":"Tie") : (t0.score>t1.score ? t0.name : t1.name);
+    finalBody.innerHTML = `
+      <p><b>${t0.name}</b>: ${t0.score}</p>
+      <p><b>${t1.name}</b>: ${t1.score}</p>
+      <p class="round-pill">${(LANG==="ar"?"الفائز: ":"Winner: ")} <b>${winner}</b></p>
+    `;
+    show("#final");
+  }
+  saveState();
+}
+
+/* =====================
+   Controls
+   ===================== */
+wrongBtn.addEventListener("click", ()=> registerAttempt(false,null));
+switchBtn.addEventListener("click", ()=>{ nextTeam(); updateScoreboard(); saveState(); });
+undoBtn.addEventListener("click", ()=> undoLast());
+revealBtn.addEventListener("click", ()=>{ for(let i=0;i<state.round.found.length;i++) if(!state.round.found[i]) state.round.found[i]=true; renderBoard(); saveState(); });
+endRoundBtn.addEventListener("click", endRound);
+nextRoundBtn.addEventListener("click", ()=>{ state.currentRoundIdx += 1; startRound(); });
+restartBtn.addEventListener("click", ()=>{ localStorage.removeItem(STORAGE_STATE_KEY); location.reload(); });
+
+/* =====================
+   Bootstrap
+   ===================== */
+(async function bootstrap(){
+  applyLang();
+  // load default bank file (if provided alongside the app)
+  await loadDefaultBankFile();
+  // if there is no saved bank in localStorage, and a bundled default is available, use it
+  if(!localStorage.getItem(STORAGE_BANK_KEY) && DEFAULT_FILE_BANK && DEFAULT_FILE_BANK.length){
+    BANK = DEFAULT_FILE_BANK.slice();
+    saveBank(BANK);
+  }
+  renderRoundSelectors();
+  // load and render categories (from local JSON)
+  loadCategories();
+  // Setup color selectors
+  setupColorSelectors();
+
+  // Hide scoreboard initially (not created)
+  if(tryRestore() && state.round){
+    // recreate scoreboard for restored game
+    createScoreboard();
+    show("#game"); 
+    updateScoreboard(); 
+    roundTitle.textContent=state.round.title; 
+    renderBoard();
+  }else{
+    show("#home");
+  }
+})();
+</script>
+</body>
+</html>

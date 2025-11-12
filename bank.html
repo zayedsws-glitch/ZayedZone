@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>أجوبة بنكية — Bank Answers</title>
+<style>
+  :root{ --bg:#070919; --ink:#fff; --card:#000; --accent:#1e90ff }
+  html,body{height:100%;margin:0;background:linear-gradient(180deg,#020617,#071229);color:var(--ink);font-family:system-ui,Arial,sans-serif}
+  .wrap{max-width:980px;margin:28px auto;padding:20px}
+  .card{background:rgba(0,0,0,0.85);border-radius:12px;padding:18px;border:1px solid rgba(255,255,255,0.04)}
+  h1{margin:0 0 12px 0}
+  .controls{display:flex;gap:8px;margin-bottom:12px}
+  .btn{background:transparent;border:1px solid rgba(30,144,255,0.6);color:var(--ink);padding:8px 12px;border-radius:8px;cursor:pointer}
+  .list{margin-top:10px}
+  .round-item{border:1px solid rgba(255,255,255,0.03);border-radius:8px;margin-bottom:10px;overflow:hidden}
+  .round-header{padding:12px;background:rgba(255,255,255,0.02);cursor:pointer;display:flex;align-items:center}
+  .round-header span{margin-right:8px}
+  .round-content{padding:12px;background:rgba(0,0,0,0.6);display:none}
+  .round-item.expanded .round-content{display:block}
+  ol{padding-left:20px;margin:0}
+  .muted{color:rgba(255,255,255,0.7)}
+  @media (max-width:700px){ .wrap{padding:12px} }
+
+  /* Additional small-screen tweaks */
+  @media (max-width:480px){
+    .wrap{ padding:10px; margin:12px auto }
+    .card{ padding:12px }
+    .round-header{ padding:10px }
+    .round-content{ padding:10px }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <h1>أجوبة بنكية</h1>
+      <div>
+        <button id="open-main" class="btn">فتح التطبيق</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="controls">
+        <button id="expand-all" class="btn">فتح الكل</button>
+        <button id="collapse-all" class="btn">طيّ الكل</button>
+      </div>
+      <div id="bank-list" class="list"></div>
+      <p class="muted" style="margin-top:12px">المصدر: بيانات البنك المحفوظة في المتصفح (localStorage)</p>
+    </div>
+  </div>
+
+<script>
+(function(){
+  const STORAGE_BANK_KEY = 'top10_bank_v4';
+  const bankList = document.getElementById('bank-list');
+  const expandAllBtn = document.getElementById('expand-all');
+  const collapseAllBtn = document.getElementById('collapse-all');
+  const openMain = document.getElementById('open-main');
+
+  openMain.addEventListener('click', ()=>{ window.open('top10.html', '_blank'); });
+
+  function loadBank(){
+    try{ const raw = localStorage.getItem(STORAGE_BANK_KEY); if(!raw) return []; return JSON.parse(raw); }catch(e){return []}
+  }
+
+  function render(){
+    bankList.innerHTML = '';
+    const bank = loadBank();
+    if(!bank || !bank.length){ bankList.innerHTML = '<p class="muted">لا توجد جولات في البنك حالياً</p>'; return; }
+    bank.forEach((r, idx)=>{
+      const item = document.createElement('div'); item.className='round-item';
+      const header = document.createElement('div'); header.className='round-header';
+      const title = document.createElement('div'); title.textContent = r.title || ('Round '+(idx+1));
+      header.appendChild(title);
+      header.addEventListener('click', ()=>{ item.classList.toggle('expanded'); });
+
+      const content = document.createElement('div'); content.className='round-content';
+      const ol = document.createElement('ol');
+      if(Array.isArray(r.answers)){
+        r.answers.forEach((a,i)=>{ if(a && a.text) { const li=document.createElement('li'); li.textContent = a.text; ol.appendChild(li);} });
+      }
+      content.appendChild(ol);
+      item.appendChild(header); item.appendChild(content);
+      bankList.appendChild(item);
+    });
+
+    expandAllBtn.addEventListener('click', ()=>{ document.querySelectorAll('.round-item').forEach(it=>it.classList.add('expanded')); });
+    collapseAllBtn.addEventListener('click', ()=>{ document.querySelectorAll('.round-item').forEach(it=>it.classList.remove('expanded')); });
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>
